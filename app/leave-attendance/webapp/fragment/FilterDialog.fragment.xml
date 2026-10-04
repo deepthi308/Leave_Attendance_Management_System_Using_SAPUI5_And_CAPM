@@ -1,0 +1,196 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Dialog
+        id="filterDialog"
+        title="Filter"
+        contentWidth="32rem"
+    >
+        <content>
+            <VBox
+                width="100%"
+                class="sapUiMediumMargin"
+            >
+                <Label
+                    text="Employee ID"
+                    labelFor="filterEmployeeIdInput"
+                />
+
+                <Input
+                    id="filterEmployeeIdInput"
+                    width="100%"
+                    placeholder="Enter Employee ID"
+                    maxLength="20"
+                />
+
+                <Label
+                    text="Status"
+                    labelFor="filterStatusSelect"
+                    class="sapUiSmallMarginTop"
+                />
+
+                <Select
+                    id="filterStatusSelect"
+                    width="100%"
+                    selectedKey=""
+                >
+                    <items>
+                        <core:Item
+                            key=""
+                            text="All Statuses"
+                        />
+                        <core:Item
+                            key="ACTIVE"
+                            text="Active"
+                        />
+                        <core:Item
+                            key="INACTIVE"
+                            text="Inactive"
+                        />
+                        <core:Item
+                            key="PENDING"
+                            text="Pending"
+                        />
+                        <core:Item
+                            key="APPROVED"
+                            text="Approved"
+                        />
+                        <core:Item
+                            key="REJECTED"
+                            text="Rejected"
+                        />
+                    </items>
+                </Select>
+
+                <Label
+                    text="From Date"
+                    labelFor="filterFromDatePicker"
+                    class="sapUiSmallMarginTop"
+                />
+
+                <DatePicker
+                    id="filterFromDatePicker"
+                    width="100%"
+                    valueFormat="yyyy-MM-dd"
+                    displayFormat="dd MMM yyyy"
+                    placeholder="Select start date"
+                />
+
+                <Label
+                    text="To Date"
+                    labelFor="filterToDatePicker"
+                    class="sapUiSmallMarginTop"
+                />
+
+                <DatePicker
+                    id="filterToDatePicker"
+                    width="100%"
+                    valueFormat="yyyy-MM-dd"
+                    displayFormat="dd MMM yyyy"
+                    placeholder="Select end date"
+                />
+
+                <Label
+                    text="Leave Type"
+                    labelFor="filterLeaveTypeSelect"
+                    class="sapUiSmallMarginTop"
+                />
+
+                <Select
+                    id="filterLeaveTypeSelect"
+                    width="100%"
+                    selectedKey=""
+                >
+                    <items>
+                        <core:Item
+                            key=""
+                            text="All Leave Types"
+                        />
+                        <core:Item
+                            key="LT001"
+                            text="Annual Leave"
+                        />
+                        <core:Item
+                            key="LT002"
+                            text="Sick Leave"
+                        />
+                        <core:Item
+                            key="LT003"
+                            text="Casual Leave"
+                        />
+                        <core:Item
+                            key="LT004"
+                            text="Maternity Leave"
+                        />
+                        <core:Item
+                            key="LT005"
+                            text="Paternity Leave"
+                        />
+                        <core:Item
+                            key="LT006"
+                            text="Compensatory Leave"
+                        />
+                        <core:Item
+                            key="LT007"
+                            text="Bereavement Leave"
+                        />
+                        <core:Item
+                            key="LT008"
+                            text="Unpaid Leave"
+                        />
+                        <core:Item
+                            key="LT009"
+                            text="Study Leave"
+                        />
+                        <core:Item
+                            key="LT010"
+                            text="Work From Home"
+                        />
+                    </items>
+                </Select>
+
+                <Label
+                    text="Year"
+                    labelFor="filterYearInput"
+                    class="sapUiSmallMarginTop"
+                />
+
+                <Input
+                    id="filterYearInput"
+                    width="100%"
+                    type="Number"
+                    placeholder="Enter year"
+                    maxLength="4"
+                />
+            </VBox>
+        </content>
+
+        <beginButton>
+            <Button
+                id="filterDialogApplyButton"
+                text="Apply"
+                type="Emphasized"
+                icon="sap-icon://filter"
+                press=".onApplyFilterDialog"
+            />
+        </beginButton>
+
+        <endButton>
+            <Button
+                id="filterDialogClearButton"
+                text="Clear"
+                icon="sap-icon://clear-filter"
+                press=".onClearFilterDialog"
+            />
+        </endButton>
+
+        <buttons>
+            <Button
+                id="filterDialogCancelButton"
+                text="Cancel"
+                press=".onCancelFilterDialog"
+            />
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition>

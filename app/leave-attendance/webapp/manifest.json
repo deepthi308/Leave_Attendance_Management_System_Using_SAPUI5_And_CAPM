@@ -1,0 +1,242 @@
+{
+  "_version": "1.89.0",
+  "sap.app": {
+    "id": "com.mandeep.leaveattendance",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.33.0",
+      "toolsId": "87e7a234-79e2-4816-9582-808fc819f9ae"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/leave/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "ZLeaveAttendanceMngementSystem-manage": {
+          "semanticObject": "ZLeaveAttendanceMngementSystem",
+          "action": "manage",
+          "title": "{{ZLeaveAttendanceMngementSystem-manage.flpTitle}}",
+          "subTitle": "{{ZLeaveAttendanceMngementSystem-manage.flpSubtitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": false,
+    "dependencies": {
+      "minUI5Version": "1.153.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "com.mandeep.leaveattendance.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true,
+          "groupId": "$auto",
+          "updateGroupId": "$auto"
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "transition": "slide",
+        "type": "View",
+        "viewType": "XML",
+        "path": "com.mandeep.leaveattendance.view",
+        "async": true
+      },
+      "routes": [
+        {
+          "name": "Dashboard",
+          "pattern": ":?query:",
+          "target": [
+            "Dashboard"
+          ]
+        },
+        {
+          "name": "Employees",
+          "pattern": "employees",
+          "target": [
+            "Employees"
+          ]
+        },
+        {
+          "name": "EmployeeDetail",
+          "pattern": "employees/{employeeId}",
+          "target": [
+            "EmployeeDetail"
+          ]
+        },
+        {
+          "name": "LeaveRequests",
+          "pattern": "leave-requests",
+          "target": [
+            "LeaveRequests"
+          ]
+        },
+        {
+          "name": "LeaveRequestDetail",
+          "pattern": "leave-requests/{requestId}",
+          "target": [
+            "LeaveRequestDetail"
+          ]
+        },
+        {
+          "name": "LeaveBalances",
+          "pattern": "leave-balances",
+          "target": [
+            "LeaveBalances"
+          ]
+        },
+        {
+          "name": "Attendance",
+          "pattern": "attendance",
+          "target": [
+            "Attendance"
+          ]
+        },
+        {
+          "name": "AttendanceDetail",
+          "pattern": "attendance/{attendanceId}",
+          "target": [
+            "AttendanceDetail"
+          ]
+        },
+        {
+          "name": "Approval",
+          "pattern": "approval",
+          "target": [
+            "Approval"
+          ]
+        },
+        {
+          "name": "Holidays",
+          "pattern": "holidays",
+          "target": [
+            "Holidays"
+          ]
+        },
+        {
+          "name": "NotFound",
+          "pattern": "not-found",
+          "target": [
+            "NotFound"
+          ]
+        }
+      ],
+      "targets": {
+        "Dashboard": {
+          "id": "Dashboard",
+          "name": "Dashboard"
+        },
+        "Employees": {
+          "id": "Employees",
+          "name": "Employees"
+        },
+        "EmployeeDetail": {
+          "id": "EmployeeDetail",
+          "name": "EmployeeDetail"
+        },
+        "LeaveRequests": {
+          "id": "LeaveRequests",
+          "name": "LeaveRequests"
+        },
+        "LeaveRequestDetail": {
+          "id": "LeaveRequestDetail",
+          "name": "LeaveRequestDetail"
+        },
+        "LeaveBalances": {
+          "id": "LeaveBalances",
+          "name": "LeaveBalances"
+        },
+        "Attendance": {
+          "id": "Attendance",
+          "name": "Attendance"
+        },
+        "AttendanceDetail": {
+          "id": "AttendanceDetail",
+          "name": "AttendanceDetail"
+        },
+        "Approval": {
+          "id": "Approval",
+          "name": "Approval"
+        },
+        "Holidays": {
+          "id": "Holidays",
+          "name": "Holidays"
+        },
+        "NotFound": {
+          "id": "NotFound",
+          "name": "NotFound"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "com.mandeep.leaveattendance.view.App",
+      "type": "XML",
+      "id": "App",
+      "async": true
+    }
+  }
+}

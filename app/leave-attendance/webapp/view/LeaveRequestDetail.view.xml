@@ -1,0 +1,664 @@
+<mvc:View
+    controllerName="com.mandeep.leaveattendance.controller.LeaveRequestDetail"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Page
+        id="leaveRequestDetailPage"
+        title="Leave Request Details"
+        showNavButton="true"
+        navButtonPress=".onBack"
+        class="sapUiResponsiveContentPadding"
+    >
+
+        <!-- =========================
+             HEADER ACTIONS
+        ========================== -->
+        <headerContent>
+
+            <Button
+                id="refreshLeaveRequestDetailButton"
+                icon="sap-icon://refresh"
+                tooltip="Refresh"
+                press=".onRefresh"
+            />
+
+            <Button
+                id="editLeaveRequestButton"
+                text="Edit"
+                icon="sap-icon://edit"
+                type="Emphasized"
+                press=".onEdit"
+                visible="{viewModel>/canEdit}"
+            />
+
+            <Button
+                id="cancelLeaveRequestButton"
+                text="Cancel Request"
+                icon="sap-icon://sys-cancel"
+                type="Reject"
+                press=".onCancelRequest"
+                visible="{viewModel>/canCancel}"
+            />
+
+        </headerContent>
+
+        <content>
+
+            <!-- =========================
+                 REQUEST HEADER
+            ========================== -->
+            <Panel
+                id="leaveRequestHeaderPanel"
+                class="sapUiMediumMarginBottom"
+            >
+                <content>
+
+                    <HBox
+                        id="leaveRequestHeaderContainer"
+                        alignItems="Center"
+                        wrap="Wrap"
+                    >
+
+                        <!-- Leave Icon -->
+                        <Avatar
+                            id="leaveRequestAvatar"
+                            displaySize="L"
+                            displayShape="Square"
+                            class="sapUiSmallMarginEnd"
+                        />
+
+                        <!-- Request Information -->
+                        <VBox
+                            id="leaveRequestHeaderInfo"
+                            class="sapUiSmallMarginEnd"
+                        >
+
+                            <Title
+                                text="{requestId}"
+                                level="H1"
+                                class="sapUiTinyMarginBottom"
+                            />
+
+                            <Text
+                                text="{leaveType/name}"
+                                class="sapUiTinyMarginBottom"
+                            />
+
+                            <Text
+                                text="{
+                                    = ${employee/firstName}
+                                    + ' '
+                                    + ${employee/lastName}
+                                }"
+                                class="sapUiTinyMarginBottom"
+                            />
+
+                            <Text
+                                text="{employee/employeeId}"
+                            />
+
+                        </VBox>
+
+                        <ToolbarSpacer />
+
+                        <!-- Request Status -->
+                        <VBox
+                            id="leaveRequestStatusContainer"
+                            alignItems="End"
+                        >
+
+                            <Label
+                                text="Request Status"
+                            />
+
+                            <ObjectStatus
+                                text="{status}"
+                                state="Information"
+                                icon="sap-icon://status-in-process"
+                                class="sapUiTinyMarginTop"
+                            />
+
+                        </VBox>
+
+                    </HBox>
+
+                </content>
+            </Panel>
+
+            <!-- =========================
+                 REQUEST SUMMARY
+            ========================== -->
+            <Panel
+                id="leaveRequestSummaryPanel"
+                headerText="Request Summary"
+                class="sapUiMediumMarginBottom"
+            >
+                <content>
+
+                    <HBox
+                        id="leaveRequestSummaryContainer"
+                        wrap="Wrap"
+                    >
+
+                        <!-- From Date -->
+                        <VBox
+                            width="15rem"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                        >
+                            <Label
+                                text="From Date"
+                            />
+
+                            <Text
+                                text="{
+                                    path: 'fromDate',
+                                    type: 'sap.ui.model.type.Date',
+                                    formatOptions: {
+                                        pattern: 'dd MMM yyyy'
+                                    }
+                                }"
+                                class="sapUiSmallMarginTop"
+                            />
+                        </VBox>
+
+                        <!-- To Date -->
+                        <VBox
+                            width="15rem"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                        >
+                            <Label
+                                text="To Date"
+                            />
+
+                            <Text
+                                text="{
+                                    path: 'toDate',
+                                    type: 'sap.ui.model.type.Date',
+                                    formatOptions: {
+                                        pattern: 'dd MMM yyyy'
+                                    }
+                                }"
+                                class="sapUiSmallMarginTop"
+                            />
+                        </VBox>
+
+                        <!-- Requested Days -->
+                        <VBox
+                            width="15rem"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                        >
+                            <Label
+                                text="Requested Days"
+                            />
+
+                            <ObjectNumber
+                                number="{requestedDays}"
+                                unit="days"
+                                emphasized="true"
+                                class="sapUiSmallMarginTop"
+                            />
+                        </VBox>
+
+                        <!-- Leave Type -->
+                        <VBox
+                            width="15rem"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                        >
+                            <Label
+                                text="Leave Type"
+                            />
+
+                            <Text
+                                text="{leaveType/name}"
+                                class="sapUiSmallMarginTop"
+                            />
+
+                            <Text
+                                text="{leaveType/leaveTypeId}"
+                                class="sapUiTinyMarginTop"
+                            />
+                        </VBox>
+
+                    </HBox>
+
+                </content>
+            </Panel>
+
+            <!-- =========================
+                 EMPLOYEE INFORMATION
+            ========================== -->
+            <Panel
+                id="leaveRequestEmployeePanel"
+                headerText="Employee Information"
+                expandable="true"
+                expanded="true"
+                class="sapUiMediumMarginBottom"
+            >
+                <content>
+
+                    <HBox
+                        id="leaveRequestEmployeeContainer"
+                        wrap="Wrap"
+                    >
+
+                        <VBox
+                            width="20rem"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                        >
+                            <Label
+                                text="Employee ID"
+                            />
+
+                            <Text
+                                text="{employee/employeeId}"
+                                class="sapUiTinyMarginTop"
+                            />
+                        </VBox>
+
+                        <VBox
+                            width="25rem"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                        >
+                            <Label
+                                text="Employee Name"
+                            />
+
+                            <Text
+                                text="{
+                                    = ${employee/firstName}
+                                    + ' '
+                                    + ${employee/lastName}
+                                }"
+                                class="sapUiTinyMarginTop"
+                            />
+                        </VBox>
+
+                        <VBox
+                            width="20rem"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                        >
+                            <Label
+                                text="Designation"
+                            />
+
+                            <Text
+                                text="{employee/designation}"
+                                class="sapUiTinyMarginTop"
+                            />
+                        </VBox>
+
+                        <VBox
+                            width="25rem"
+                            class="sapUiSmallMarginBottom"
+                        >
+                            <Label
+                                text="Email"
+                            />
+
+                            <Text
+                                text="{employee/email}"
+                                class="sapUiTinyMarginTop"
+                            />
+                        </VBox>
+
+                    </HBox>
+
+                </content>
+            </Panel>
+
+            <!-- =========================
+                 LEAVE DETAILS
+            ========================== -->
+            <Panel
+                id="leaveRequestDetailsPanel"
+                headerText="Leave Details"
+                expandable="true"
+                expanded="true"
+                class="sapUiMediumMarginBottom"
+            >
+                <content>
+
+                    <VBox>
+
+                        <Label
+                            text="Reason"
+                            class="sapUiSmallMarginBottom"
+                        />
+
+                        <TextArea
+                            id="leaveRequestReasonText"
+                            value="{reason}"
+                            editable="false"
+                            width="100%"
+                            rows="5"
+                            growing="true"
+                            class="sapUiSmallMarginBottom"
+                        />
+
+                        <HBox
+                            wrap="Wrap"
+                            class="sapUiSmallMarginTop"
+                        >
+
+                            <VBox
+                                width="20rem"
+                                class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                            >
+                                <Label
+                                    text="Leave Type Description"
+                                />
+
+                                <Text
+                                    text="{leaveType/description}"
+                                    wrapping="true"
+                                    class="sapUiTinyMarginTop"
+                                />
+                            </VBox>
+
+                            <VBox
+                                width="15rem"
+                                class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                            >
+                                <Label
+                                    text="Paid Leave"
+                                />
+
+                                <ObjectStatus
+                                    text="{leaveType/isPaid}"
+                                    class="sapUiTinyMarginTop"
+                                />
+                            </VBox>
+
+                            <VBox
+                                width="18rem"
+                                class="sapUiSmallMarginBottom"
+                            >
+                                <Label
+                                    text="Annual Leave Limit"
+                                />
+
+                                <ObjectNumber
+                                    number="{leaveType/annualLimit}"
+                                    unit="days"
+                                    class="sapUiTinyMarginTop"
+                                />
+                            </VBox>
+
+                        </HBox>
+
+                    </VBox>
+
+                </content>
+            </Panel>
+
+            <!-- =========================
+                 REQUEST TIMELINE
+            ========================== -->
+            <Panel
+                id="leaveRequestTimelinePanel"
+                headerText="Request Timeline"
+                expandable="true"
+                expanded="true"
+                class="sapUiMediumMarginBottom"
+            >
+                <content>
+
+                    <List
+                        id="leaveRequestTimelineList"
+                        showSeparators="Inner"
+                    >
+
+                        <!-- Submitted -->
+                        <CustomListItem
+                            id="submittedTimelineItem"
+                        >
+                            <HBox
+                                alignItems="Center"
+                                class="sapUiSmallMargin"
+                            >
+
+                                <Avatar
+                                    displaySize="S"
+                                    displayShape="Circle"
+                                    class="sapUiSmallMarginEnd"
+                                />
+
+                                <VBox>
+                                    <Title
+                                        text="Request Submitted"
+                                        level="H5"
+                                    />
+
+                                    <Text
+                                        text="Request was submitted for approval."
+                                    />
+
+                                    <Text
+                                        text="{submittedAt}"
+                                        class="sapUiTinyMarginTop"
+                                    />
+                                </VBox>
+
+                            </HBox>
+                        </CustomListItem>
+
+                        <!-- Approved -->
+                        <CustomListItem
+                            id="approvedTimelineItem"
+                            visible="{viewModel>/showApprovedTimeline}"
+                        >
+                            <HBox
+                                alignItems="Center"
+                                class="sapUiSmallMargin"
+                            >
+
+                                <Avatar
+                                    displaySize="S"
+                                    displayShape="Circle"
+                                    class="sapUiSmallMarginEnd"
+                                />
+
+                                <VBox>
+                                    <Title
+                                        text="Request Approved"
+                                        level="H5"
+                                    />
+
+                                    <Text
+                                        text="The leave request was approved."
+                                    />
+
+                                    <Text
+                                        text="{approvedAt}"
+                                        class="sapUiTinyMarginTop"
+                                    />
+                                </VBox>
+
+                            </HBox>
+                        </CustomListItem>
+
+                        <!-- Rejected -->
+                        <CustomListItem
+                            id="rejectedTimelineItem"
+                            visible="{viewModel>/showRejectedTimeline}"
+                        >
+                            <HBox
+                                alignItems="Center"
+                                class="sapUiSmallMargin"
+                            >
+
+                                <Avatar
+                                    displaySize="S"
+                                    displayShape="Circle"
+                                    class="sapUiSmallMarginEnd"
+                                />
+
+                                <VBox>
+                                    <Title
+                                        text="Request Rejected"
+                                        level="H5"
+                                    />
+
+                                    <Text
+                                        text="The leave request was rejected."
+                                    />
+
+                                    <Text
+                                        text="{rejectedAt}"
+                                        class="sapUiTinyMarginTop"
+                                    />
+                                </VBox>
+
+                            </HBox>
+                        </CustomListItem>
+
+                    </List>
+
+                </content>
+            </Panel>
+
+            <!-- =========================
+                 MANAGER COMMENTS
+            ========================== -->
+            <Panel
+                id="managerCommentsPanel"
+                headerText="Manager Comments"
+                expandable="true"
+                expanded="true"
+                class="sapUiMediumMarginBottom"
+            >
+                <content>
+
+                    <TextArea
+                        id="managerCommentsTextArea"
+                        value="{managerComments}"
+                        editable="false"
+                        width="100%"
+                        rows="5"
+                        growing="true"
+                        placeholder="No manager comments available."
+                    />
+
+                </content>
+            </Panel>
+
+            <!-- =========================
+                 SYSTEM INFORMATION
+            ========================== -->
+            <Panel
+                id="leaveRequestSystemInfoPanel"
+                headerText="System Information"
+                expandable="true"
+                expanded="false"
+                class="sapUiMediumMarginBottom"
+            >
+                <content>
+
+                    <HBox
+                        wrap="Wrap"
+                    >
+
+                        <VBox
+                            width="20rem"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                        >
+                            <Label
+                                text="Request ID"
+                            />
+
+                            <Text
+                                text="{requestId}"
+                                class="sapUiTinyMarginTop"
+                            />
+                        </VBox>
+
+                        <VBox
+                            width="20rem"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                        >
+                            <Label
+                                text="Created At"
+                            />
+
+                            <Text
+                                text="{createdAt}"
+                                class="sapUiTinyMarginTop"
+                            />
+                        </VBox>
+
+                        <VBox
+                            width="20rem"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                        >
+                            <Label
+                                text="Created By"
+                            />
+
+                            <Text
+                                text="{createdBy}"
+                                class="sapUiTinyMarginTop"
+                            />
+                        </VBox>
+
+                        <VBox
+                            width="20rem"
+                            class="sapUiSmallMarginBottom"
+                        >
+                            <Label
+                                text="Last Modified"
+                            />
+
+                            <Text
+                                text="{modifiedAt}"
+                                class="sapUiTinyMarginTop"
+                            />
+                        </VBox>
+
+                    </HBox>
+
+                </content>
+            </Panel>
+
+        </content>
+
+        <!-- =========================
+             FOOTER ACTIONS
+        ========================== -->
+        <footer>
+            <Toolbar>
+
+                <Button
+                    id="leaveRequestFooterApproveButton"
+                    text="Approve"
+                    icon="sap-icon://accept"
+                    type="Accept"
+                    press=".onApprove"
+                    visible="{viewModel>/canApprove}"
+                    class="sapUiTinyMarginEnd"
+                />
+
+                <Button
+                    id="leaveRequestFooterRejectButton"
+                    text="Reject"
+                    icon="sap-icon://decline"
+                    type="Reject"
+                    press=".onReject"
+                    visible="{viewModel>/canApprove}"
+                />
+
+                <ToolbarSpacer />
+
+                <Button
+                    id="leaveRequestFooterRefreshButton"
+                    text="Refresh"
+                    icon="sap-icon://refresh"
+                    press=".onRefresh"
+                />
+
+            </Toolbar>
+        </footer>
+
+    </Page>
+</mvc:View>

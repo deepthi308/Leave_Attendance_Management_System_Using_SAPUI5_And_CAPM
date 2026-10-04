@@ -1,0 +1,481 @@
+<mvc:View
+    controllerName="com.mandeep.leaveattendance.controller.Approval"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.f"
+    xmlns:fb="sap.ui.comp.filterbar"
+>
+    <Page
+        id="approvalPage"
+        title="Approvals"
+        showNavButton="true"
+        navButtonPress=".onBack"
+    >
+
+        <content>
+
+            <!-- Header Summary -->
+            <VBox class="sapUiMediumMargin">
+
+                <HBox
+                    justifyContent="SpaceBetween"
+                    alignItems="Center"
+                    class="approvalHeader"
+                >
+                    <VBox>
+                        <Title
+                            text="Pending Approvals"
+                            level="H2"
+                        />
+                        <Text
+                            text="Review and process employee leave and attendance requests"
+                            class="sapUiTinyMarginTop"
+                        />
+                    </VBox>
+
+                    <Button
+                        text="Refresh"
+                        icon="sap-icon://refresh"
+                        type="Transparent"
+                        press=".onRefresh"
+                    />
+                </HBox>
+
+                <!-- KPI Cards -->
+                <HBox
+                    wrap="Wrap"
+                    class="sapUiMediumMarginTop"
+                >
+
+                    <GenericTile
+                        header="Pending Leave Requests"
+                        subheader="Awaiting manager approval"
+                        class="approvalKpiTile sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                        press=".onLeaveRequestsPress"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{= ${viewModel>/pendingLeaveCount} || 0 }"
+                                icon="sap-icon://calendar"
+                                valueColor="Critical"
+                            />
+                        </TileContent>
+                    </GenericTile>
+
+                    <GenericTile
+                        header="Attendance Corrections"
+                        subheader="Awaiting manager approval"
+                        class="approvalKpiTile sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                        press=".onAttendanceCorrectionsPress"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{= ${viewModel>/pendingCorrectionCount} || 0 }"
+                                icon="sap-icon://time-entry-request"
+                                valueColor="Critical"
+                            />
+                        </TileContent>
+                    </GenericTile>
+
+                    <GenericTile
+                        header="Total Pending"
+                        subheader="Items requiring action"
+                        class="approvalKpiTile sapUiTinyMarginBottom"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{= (${viewModel>/pendingLeaveCount} || 0) + (${viewModel>/pendingCorrectionCount} || 0) }"
+                                icon="sap-icon://pending"
+                                valueColor="Critical"
+                            />
+                        </TileContent>
+                    </GenericTile>
+
+                </HBox>
+
+                <!-- Approval Tabs -->
+                <IconTabBar
+                    id="approvalTabBar"
+                    class="sapUiMediumMarginTop"
+                    selectedKey="leave"
+                    select=".onTabSelect"
+                    expandable="false"
+                >
+
+                    <items>
+
+                        <!-- Leave Requests -->
+                        <IconTabFilter
+                            key="leave"
+                            text="Leave Requests"
+                            icon="sap-icon://calendar"
+                            count="{viewModel>/pendingLeaveCount}"
+                        >
+
+                            <VBox class="sapUiSmallMarginTop">
+
+                                <Table
+                                    id="leaveApprovalTable"
+                                    items="{
+                                        path: '/LeaveRequests',
+                                        parameters: {
+                                            $expand: 'employee,leaveType'
+                                        },
+                                        sorter: {
+                                            path: 'submittedAt',
+                                            descending: true
+                                        }
+                                    }"
+                                    growing="true"
+                                    growingThreshold="10"
+                                    growingScrollToLoad="true"
+                                    mode="None"
+                                    noDataText="No pending leave requests"
+                                >
+
+                                    <headerToolbar>
+                                        <OverflowToolbar>
+                                            <Title
+                                                text="Leave Requests"
+                                                level="H3"
+                                            />
+
+                                            <ToolbarSpacer />
+
+                                            <Button
+                                                text="Refresh"
+                                                icon="sap-icon://refresh"
+                                                type="Transparent"
+                                                press=".onRefreshLeaveRequests"
+                                            />
+                                        </OverflowToolbar>
+                                    </headerToolbar>
+
+                                    <columns>
+
+                                        <Column width="8rem">
+                                            <Text text="Request ID" />
+                                        </Column>
+
+                                        <Column width="13rem">
+                                            <Text text="Employee" />
+                                        </Column>
+
+                                        <Column width="10rem">
+                                            <Text text="Leave Type" />
+                                        </Column>
+
+                                        <Column width="10rem">
+                                            <Text text="From Date" />
+                                        </Column>
+
+                                        <Column width="10rem">
+                                            <Text text="To Date" />
+                                        </Column>
+
+                                        <Column width="8rem">
+                                            <Text text="Days" />
+                                        </Column>
+
+                                        <Column minScreenWidth="Tablet">
+                                            <Text text="Reason" />
+                                        </Column>
+
+                                        <Column width="10rem">
+                                            <Text text="Submitted" />
+                                        </Column>
+
+                                        <Column width="8rem">
+                                            <Text text="Status" />
+                                        </Column>
+
+                                        <Column width="8rem">
+                                            <Text text="Action" />
+                                        </Column>
+
+                                    </columns>
+
+                                    <items>
+                                        <ColumnListItem
+                                            type="Navigation"
+                                            press=".onLeaveRequestPress"
+                                        >
+
+                                            <cells>
+
+                                                <ObjectIdentifier
+                                                    title="{requestId}"
+                                                />
+
+                                                <VBox>
+                                                    <Text
+                                                        text="{employee/firstName} {employee/lastName}"
+                                                    />
+                                                    <Text
+                                                        text="{employee/employeeId}"
+                                                        class="secondaryText"
+                                                    />
+                                                </VBox>
+
+                                                <Text
+                                                    text="{leaveType/name}"
+                                                />
+
+                                                <Text
+                                                    text="{
+                                                        path: 'fromDate',
+                                                        type: 'sap.ui.model.type.Date',
+                                                        formatOptions: {
+                                                            style: 'medium'
+                                                        }
+                                                    }"
+                                                />
+
+                                                <Text
+                                                    text="{
+                                                        path: 'toDate',
+                                                        type: 'sap.ui.model.type.Date',
+                                                        formatOptions: {
+                                                            style: 'medium'
+                                                        }
+                                                    }"
+                                                />
+
+                                                <ObjectNumber
+                                                    number="{requestedDays}"
+                                                    unit="days"
+                                                />
+
+                                                <Text
+                                                    text="{reason}"
+                                                    maxLines="2"
+                                                />
+
+                                                <Text
+                                                    text="{
+                                                        path: 'submittedAt',
+                                                        type: 'sap.ui.model.type.DateTime',
+                                                        formatOptions: {
+                                                            style: 'medium'
+                                                        }
+                                                    }"
+                                                />
+
+                                                <ObjectStatus
+                                                    text="{status}"
+                                                    state="Warning"
+                                                />
+
+                                                <Button
+                                                    text="Review"
+                                                    icon="sap-icon://inspect"
+                                                    type="Emphasized"
+                                                    press=".onLeaveRequestPress"
+                                                />
+
+                                            </cells>
+
+                                        </ColumnListItem>
+                                    </items>
+
+                                </Table>
+
+                            </VBox>
+
+                        </IconTabFilter>
+
+                        <!-- Attendance Corrections -->
+                        <IconTabFilter
+                            key="attendance"
+                            text="Attendance Corrections"
+                            icon="sap-icon://time-entry-request"
+                            count="{viewModel>/pendingCorrectionCount}"
+                        >
+
+                            <VBox class="sapUiSmallMarginTop">
+
+                                <Table
+                                    id="attendanceCorrectionTable"
+                                    items="{
+                                        path: '/AttendanceCorrections',
+                                        parameters: {
+                                            $expand: 'employee,attendance'
+                                        },
+                                        sorter: {
+                                            path: 'submittedAt',
+                                            descending: true
+                                        }
+                                    }"
+                                    growing="true"
+                                    growingThreshold="10"
+                                    growingScrollToLoad="true"
+                                    noDataText="No pending attendance corrections"
+                                >
+
+                                    <headerToolbar>
+                                        <OverflowToolbar>
+
+                                            <Title
+                                                text="Attendance Corrections"
+                                                level="H3"
+                                            />
+
+                                            <ToolbarSpacer />
+
+                                            <Button
+                                                text="Refresh"
+                                                icon="sap-icon://refresh"
+                                                type="Transparent"
+                                                press=".onRefreshCorrections"
+                                            />
+
+                                        </OverflowToolbar>
+                                    </headerToolbar>
+
+                                    <columns>
+
+                                        <Column width="9rem">
+                                            <Text text="Correction ID" />
+                                        </Column>
+
+                                        <Column width="13rem">
+                                            <Text text="Employee" />
+                                        </Column>
+
+                                        <Column width="11rem">
+                                            <Text text="Attendance Date" />
+                                        </Column>
+
+                                        <Column width="11rem">
+                                            <Text text="Requested Check-In" />
+                                        </Column>
+
+                                        <Column width="11rem">
+                                            <Text text="Requested Check-Out" />
+                                        </Column>
+
+                                        <Column minScreenWidth="Tablet">
+                                            <Text text="Reason" />
+                                        </Column>
+
+                                        <Column width="10rem">
+                                            <Text text="Submitted" />
+                                        </Column>
+
+                                        <Column width="8rem">
+                                            <Text text="Status" />
+                                        </Column>
+
+                                        <Column width="8rem">
+                                            <Text text="Action" />
+                                        </Column>
+
+                                    </columns>
+
+                                    <items>
+
+                                        <ColumnListItem
+                                            type="Navigation"
+                                            press=".onAttendanceCorrectionPress"
+                                        >
+
+                                            <cells>
+
+                                                <ObjectIdentifier
+                                                    title="{correctionId}"
+                                                />
+
+                                                <VBox>
+
+                                                    <Text
+                                                        text="{employee/firstName} {employee/lastName}"
+                                                    />
+
+                                                    <Text
+                                                        text="{employee/employeeId}"
+                                                        class="secondaryText"
+                                                    />
+
+                                                </VBox>
+
+                                                <Text
+                                                    text="{
+                                                        path: 'attendanceDate',
+                                                        type: 'sap.ui.model.type.Date',
+                                                        formatOptions: {
+                                                            style: 'medium'
+                                                        }
+                                                    }"
+                                                />
+
+                                                <Text
+                                                    text="{
+                                                        path: 'requestedCheckIn',
+                                                        type: 'sap.ui.model.type.DateTime',
+                                                        formatOptions: {
+                                                            style: 'medium'
+                                                        }
+                                                    }"
+                                                />
+
+                                                <Text
+                                                    text="{
+                                                        path: 'requestedCheckOut',
+                                                        type: 'sap.ui.model.type.DateTime',
+                                                        formatOptions: {
+                                                            style: 'medium'
+                                                        }
+                                                    }"
+                                                />
+
+                                                <Text
+                                                    text="{reason}"
+                                                    maxLines="2"
+                                                />
+
+                                                <Text
+                                                    text="{
+                                                        path: 'submittedAt',
+                                                        type: 'sap.ui.model.type.DateTime',
+                                                        formatOptions: {
+                                                            style: 'medium'
+                                                        }
+                                                    }"
+                                                />
+
+                                                <ObjectStatus
+                                                    text="{status}"
+                                                    state="Warning"
+                                                />
+
+                                                <Button
+                                                    text="Review"
+                                                    icon="sap-icon://inspect"
+                                                    type="Emphasized"
+                                                    press=".onAttendanceCorrectionPress"
+                                                />
+
+                                            </cells>
+
+                                        </ColumnListItem>
+
+                                    </items>
+
+                                </Table>
+
+                            </VBox>
+
+                        </IconTabFilter>
+
+                    </items>
+
+                </IconTabBar>
+
+            </VBox>
+
+        </content>
+
+    </Page>
+
+</mvc:View>

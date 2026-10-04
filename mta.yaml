@@ -1,0 +1,151 @@
+_schema-version: 3.3.0
+ID: Leave_Attendance_Management_System
+description: A simple CAP project.
+version: 1.0.0
+modules:
+- name: Leave_Attendance_Management_System-srv
+  type: nodejs
+  path: gen/srv
+  requires:
+  - name: Leave_Attendance_Management_System-auth
+  - name: Leave_Attendance_Management_System-db
+  - name: Leave_Attendance_Management_System-connectivity
+  - name: Leave_Attendance_Management_System-destination
+  provides:
+  - name: srv-api
+    properties:
+      srv-url: ${default-url}
+  parameters:
+    buildpack: nodejs_buildpack
+    instances: 1
+  build-parameters:
+    builder: npm-ci
+- name: Leave_Attendance_Management_System-db-deployer
+  type: hdb
+  path: gen/db
+  requires:
+  - name: Leave_Attendance_Management_System-db
+  parameters:
+    buildpack: nodejs_buildpack
+- name: Leave_Attendance_Management_System
+  type: approuter.nodejs
+  path: app/router
+  requires:
+  - name: srv-api
+    group: destinations
+    properties:
+      forwardAuthToken: true
+      name: srv-api
+      url: ~{srv-url}
+  - name: Leave_Attendance_Management_System-auth
+  - name: Leave_Attendance_Management_System-destination
+  - name: Leave_Attendance_Management_System-html5-runtime
+  provides:
+  - name: app-api
+    properties:
+      app-protocol: ${protocol}
+      app-uri: ${default-uri}
+  parameters:
+    disk-quota: 256M
+    keep-existing-routes: true
+    memory: 256M
+- name: Leave_Attendance_Management_System-app-deployer
+  type: com.sap.application.content
+  path: gen
+  requires:
+  - name: Leave_Attendance_Management_System-auth
+  - name: srv-api
+  - name: Leave_Attendance_Management_System-html5-repo-host
+    parameters:
+      config:
+        HTML5Runtime_enabled: true
+      content-target: true
+  build-parameters:
+    build-result: app/
+    requires:
+    - artifacts:
+      - commandeepleaveattendance.zip
+      name: commandeepleaveattendance
+      target-path: app/
+- name: commandeepleaveattendance
+  type: html5
+  path: app/leave-attendance
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: Leave_Attendance_Management_System-auth
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      oauth2-configuration:
+        credential-types:
+        - binding-secret
+        - x509
+        redirect-uris:
+        - https://*~{app-api/app-uri}/**
+      tenant-mode: dedicated
+      xsappname: Leave_Attendance_Management_System-${org}-${space}
+    path: ./xs-security.json
+    service: xsuaa
+    service-plan: application
+  requires:
+  - name: app-api
+- name: Leave_Attendance_Management_System-db
+  type: com.sap.xs.hdi-container
+  parameters:
+    service: hana
+    service-plan: hdi-shared
+- name: Leave_Attendance_Management_System-connectivity
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: connectivity
+    service-plan: lite
+- name: Leave_Attendance_Management_System-destination
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: false
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          - Authentication: NoAuthentication
+            HTML5.DynamicDestination: true
+            HTML5.ForwardAuthToken: true
+            Name: srv-api
+            ProxyType: Internet
+            Type: HTTP
+            URL: ~{srv-api/srv-url}
+          existing_destinations_policy: update
+    service: destination
+    service-plan: lite
+  requires:
+  - name: srv-api
+- name: Leave_Attendance_Management_System-html5-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-host
+- name: Leave_Attendance_Management_System-html5-runtime
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-plan: app-runtime
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+  - builder: custom
+    commands:
+    - npm ci
+    - npx cds build --production

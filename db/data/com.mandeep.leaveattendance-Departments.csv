@@ -1,0 +1,11 @@
+ID,departmentId,name,description,createdAt,createdBy,modifiedAt,modifiedBy
+1,DEPT001,Human Resources,Manages employee relations recruitment payroll and organizational policies,2026-09-01T09:00:00Z,system,2026-09-01T09:00:00Z,system
+2,DEPT002,Information Technology,Responsible for software development infrastructure applications and technical support,2026-09-01T09:05:00Z,system,2026-09-01T09:05:00Z,system
+3,DEPT003,Finance,Manages financial planning accounting budgeting and reporting activities,2026-09-01T09:10:00Z,system,2026-09-01T09:10:00Z,system
+4,DEPT004,Sales,Responsible for customer acquisition sales operations account management and revenue growth,2026-09-01T09:15:00Z,system,2026-09-01T09:15:00Z,system
+5,DEPT005,Marketing,Handles brand management digital marketing campaigns market research and communications,2026-09-01T09:20:00Z,system,2026-09-01T09:20:00Z,system
+6,DEPT006,Operations,Manages daily business operations process improvement and service delivery,2026-09-01T09:25:00Z,system,2026-09-01T09:25:00Z,system
+7,DEPT007,Customer Support,Provides customer assistance issue resolution and support services,2026-09-01T09:30:00Z,system,2026-09-01T09:30:00Z,system
+8,DEPT008,Research and Development,Focuses on product innovation research engineering and development initiatives,2026-09-01T09:35:00Z,system,2026-09-01T09:35:00Z,system
+9,DEPT009,Legal and Compliance,Manages legal matters regulatory compliance contracts and corporate governance,2026-09-01T09:40:00Z,system,2026-09-01T09:40:00Z,system
+10,DEPT010,Administration,Manages facilities office administration employee services and workplace operations,2026-09-01T09:45:00Z,system,2026-09-01T09:45:00Z,system

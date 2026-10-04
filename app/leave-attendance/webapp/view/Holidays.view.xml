@@ -1,0 +1,564 @@
+<mvc:View
+    controllerName="com.mandeep.leaveattendance.controller.Holidays"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Page
+        id="holidaysPage"
+        title="Holiday Calendar"
+        showNavButton="true"
+        navButtonPress=".onBack"
+        class="sapUiResponsiveContentPadding"
+    >
+
+        <!-- =========================
+             HEADER ACTIONS
+        ========================== -->
+        <headerContent>
+            <Button
+                id="refreshHolidaysButton"
+                icon="sap-icon://refresh"
+                tooltip="Refresh"
+                press=".onRefresh"
+            />
+
+            <Button
+                id="addHolidayButton"
+                text="Add Holiday"
+                icon="sap-icon://add"
+                type="Emphasized"
+                press=".onAddHoliday"
+            />
+        </headerContent>
+
+        <content>
+
+            <!-- =========================
+                 PAGE HEADER
+            ========================== -->
+            <VBox
+                id="holidaysHeaderSection"
+                class="sapUiMediumMarginBottom"
+            >
+                <Title
+                    text="Holiday Calendar"
+                    level="H1"
+                    class="sapUiSmallMarginBottom"
+                />
+
+                <Text
+                    text="View and manage organization holidays and special days."
+                    class="sapUiTinyMarginBottom"
+                />
+            </VBox>
+
+            <!-- =========================
+                 KPI CARDS
+            ========================== -->
+            <HBox
+                id="holidayKpiContainer"
+                wrap="Wrap"
+                class="sapUiMediumMarginBottom"
+            >
+
+                <!-- Total Holidays -->
+                <VBox
+                    id="totalHolidaysCard"
+                    class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                    width="15rem"
+                >
+                    <GenericTile
+                        id="totalHolidaysTile"
+                        header="Total Holidays"
+                        subheader="Configured holidays"
+                        press=".onTotalHolidaysPress"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{viewModel>/totalHolidays}"
+                                icon="sap-icon://calendar"
+                                valueColor="Good"
+                            />
+                        </TileContent>
+                    </GenericTile>
+                </VBox>
+
+                <!-- Upcoming Holidays -->
+                <VBox
+                    id="upcomingHolidaysCard"
+                    class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                    width="15rem"
+                >
+                    <GenericTile
+                        id="upcomingHolidaysTile"
+                        header="Upcoming"
+                        subheader="Future holidays"
+                        press=".onUpcomingHolidaysPress"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{viewModel>/upcomingHolidays}"
+                                icon="sap-icon://appointment-2"
+                                valueColor="Critical"
+                            />
+                        </TileContent>
+                    </GenericTile>
+                </VBox>
+
+                <!-- National Holidays -->
+                <VBox
+                    id="nationalHolidaysCard"
+                    class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                    width="15rem"
+                >
+                    <GenericTile
+                        id="nationalHolidaysTile"
+                        header="National Holidays"
+                        subheader="Public holidays"
+                        press=".onNationalHolidaysPress"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{viewModel>/nationalHolidays}"
+                                icon="sap-icon://flag"
+                                valueColor="Neutral"
+                            />
+                        </TileContent>
+                    </GenericTile>
+                </VBox>
+
+                <!-- Optional / Special Holidays -->
+                <VBox
+                    id="optionalHolidaysCard"
+                    class="sapUiSmallMarginBottom"
+                    width="15rem"
+                >
+                    <GenericTile
+                        id="optionalHolidaysTile"
+                        header="Optional / Special"
+                        subheader="Special holidays"
+                        press=".onOptionalHolidaysPress"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{viewModel>/optionalHolidays}"
+                                icon="sap-icon://favorite"
+                                valueColor="Good"
+                            />
+                        </TileContent>
+                    </GenericTile>
+                </VBox>
+
+            </HBox>
+
+            <!-- =========================
+                 FILTER SECTION
+            ========================== -->
+            <Panel
+                id="holidayFilterPanel"
+                headerText="Search & Filter"
+                expandable="true"
+                expanded="true"
+                class="sapUiMediumMarginBottom"
+            >
+                <content>
+
+                    <HBox
+                        id="holidayFilterRow"
+                        wrap="Wrap"
+                        alignItems="End"
+                    >
+
+                        <!-- Search -->
+                        <VBox
+                            id="holidaySearchContainer"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                            width="20rem"
+                        >
+                            <Label
+                                text="Search"
+                                labelFor="holidaySearchInput"
+                            />
+
+                            <SearchField
+                                id="holidaySearchInput"
+                                width="100%"
+                                placeholder="Search by holiday name..."
+                                liveChange=".onSearch"
+                            />
+                        </VBox>
+
+                        <!-- Holiday Type -->
+                        <VBox
+                            id="holidayTypeFilterContainer"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                            width="15rem"
+                        >
+                            <Label
+                                text="Holiday Type"
+                                labelFor="holidayTypeSelect"
+                            />
+
+                            <Select
+                                id="holidayTypeSelect"
+                                width="100%"
+                                selectedKey=""
+                                change=".onFilterChange"
+                            >
+                                <items>
+                                    <core:Item
+                                        key=""
+                                        text="All Types"
+                                    />
+                                    <core:Item
+                                        key="NATIONAL"
+                                        text="National"
+                                    />
+                                    <core:Item
+                                        key="REGIONAL"
+                                        text="Regional"
+                                    />
+                                    <core:Item
+                                        key="OPTIONAL"
+                                        text="Optional"
+                                    />
+                                    <core:Item
+                                        key="COMPANY"
+                                        text="Company"
+                                    />
+                                </items>
+                            </Select>
+                        </VBox>
+
+                        <!-- Location -->
+                        <VBox
+                            id="holidayLocationFilterContainer"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                            width="15rem"
+                        >
+                            <Label
+                                text="Location"
+                                labelFor="holidayLocationInput"
+                            />
+
+                            <Input
+                                id="holidayLocationInput"
+                                width="100%"
+                                placeholder="Enter location"
+                            />
+                        </VBox>
+
+                        <!-- Status -->
+                        <VBox
+                            id="holidayStatusFilterContainer"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                            width="12rem"
+                        >
+                            <Label
+                                text="Status"
+                                labelFor="holidayStatusSelect"
+                            />
+
+                            <Select
+                                id="holidayStatusSelect"
+                                width="100%"
+                                selectedKey=""
+                            >
+                                <items>
+                                    <core:Item
+                                        key=""
+                                        text="All"
+                                    />
+                                    <core:Item
+                                        key="ACTIVE"
+                                        text="Active"
+                                    />
+                                    <core:Item
+                                        key="INACTIVE"
+                                        text="Inactive"
+                                    />
+                                </items>
+                            </Select>
+                        </VBox>
+
+                        <!-- Year -->
+                        <VBox
+                            id="holidayYearFilterContainer"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                            width="10rem"
+                        >
+                            <Label
+                                text="Year"
+                                labelFor="holidayYearInput"
+                            />
+
+                            <Input
+                                id="holidayYearInput"
+                                width="100%"
+                                type="Number"
+                                placeholder="2026"
+                            />
+                        </VBox>
+
+                        <!-- Filter Buttons -->
+                        <HBox
+                            id="holidayFilterButtons"
+                            class="sapUiSmallMarginBottom"
+                            alignItems="Center"
+                        >
+                            <Button
+                                id="applyHolidayFilterButton"
+                                text="Apply"
+                                type="Emphasized"
+                                icon="sap-icon://filter"
+                                press=".onApplyFilter"
+                                class="sapUiTinyMarginEnd"
+                            />
+
+                            <Button
+                                id="clearHolidayFilterButton"
+                                text="Clear"
+                                icon="sap-icon://clear-filter"
+                                press=".onClearFilter"
+                            />
+                        </HBox>
+
+                    </HBox>
+
+                </content>
+            </Panel>
+
+            <!-- =========================
+                 HOLIDAY TABLE
+            ========================== -->
+            <Panel
+                id="holidayTablePanel"
+                headerText="Holiday List"
+                class="sapUiMediumMarginBottom"
+            >
+                <headerToolbar>
+                    <Toolbar>
+                        <Title
+                            text="Holidays"
+                            level="H3"
+                        />
+
+                        <ToolbarSpacer />
+
+                        <Button
+                            id="exportHolidaysButton"
+                            text="Export"
+                            icon="sap-icon://excel-attachment"
+                            press=".onExport"
+                        />
+
+                        <Button
+                            id="refreshHolidayTableButton"
+                            icon="sap-icon://refresh"
+                            tooltip="Refresh"
+                            press=".onRefresh"
+                        />
+                    </Toolbar>
+                </headerToolbar>
+
+                <content>
+
+                    <Table
+                        id="holidaysTable"
+                        items="{
+                            path: '/Holidays',
+                            parameters: {
+                                $orderby: 'holidayDate asc'
+                            }
+                        }"
+                        growing="true"
+                        growingThreshold="10"
+                        growingScrollToLoad="true"
+                        mode="None"
+                        noDataText="No holidays found"
+                    >
+
+                        <columns>
+
+                            <Column width="8rem">
+                                <Text text="Holiday ID" />
+                            </Column>
+
+                            <Column width="18rem">
+                                <Text text="Holiday Name" />
+                            </Column>
+
+                            <Column width="11rem">
+                                <Text text="Holiday Date" />
+                            </Column>
+
+                            <Column width="12rem">
+                                <Text text="Holiday Type" />
+                            </Column>
+
+                            <Column width="12rem">
+                                <Text text="Location" />
+                            </Column>
+
+                            <Column width="12rem">
+                                <Text text="Status" />
+                            </Column>
+
+                            <Column
+                                width="6rem"
+                                hAlign="Center"
+                            >
+                                <Text text="Action" />
+                            </Column>
+
+                        </columns>
+
+                        <items>
+
+                            <ColumnListItem
+                                type="Navigation"
+                                press=".onHolidayPress"
+                            >
+
+                                <!-- Holiday ID -->
+                                <cells>
+                                    <ObjectIdentifier
+                                        title="{holidayId}"
+                                    />
+                                </cells>
+
+                                <!-- Holiday Name -->
+                                <cells>
+                                    <VBox>
+                                        <Text
+                                            text="{name}"
+                                            wrapping="true"
+                                        />
+
+                                        <Text
+                                            text="{description}"
+                                            wrapping="true"
+                                            class="sapUiTinyMarginTop"
+                                        />
+                                    </VBox>
+                                </cells>
+
+                                <!-- Date -->
+                                <cells>
+                                    <Text
+                                        text="{
+                                            path: 'holidayDate',
+                                            type: 'sap.ui.model.type.Date',
+                                            formatOptions: {
+                                                pattern: 'dd MMM yyyy'
+                                            }
+                                        }"
+                                    />
+                                </cells>
+
+                                <!-- Holiday Type -->
+                                <cells>
+                                    <ObjectStatus
+                                        text="{holidayType}"
+                                    />
+                                </cells>
+
+                                <!-- Location -->
+                                <cells>
+                                    <Text
+                                        text="{location}"
+                                        wrapping="true"
+                                    />
+                                </cells>
+
+                                <!-- Status -->
+                                <cells>
+                                    <ObjectStatus
+                                        text="{status}"
+                                    />
+                                </cells>
+
+                                <!-- Action -->
+                                <cells>
+                                    <Button
+                                        icon="sap-icon://display"
+                                        type="Transparent"
+                                        tooltip="View Holiday"
+                                        press=".onHolidayPress"
+                                    />
+                                </cells>
+
+                            </ColumnListItem>
+
+                        </items>
+
+                    </Table>
+
+                </content>
+            </Panel>
+
+            <!-- =========================
+                 UPCOMING HOLIDAYS
+            ========================== -->
+            <Panel
+                id="upcomingHolidayPanel"
+                headerText="Upcoming Holidays"
+                expandable="true"
+                expanded="true"
+                class="sapUiMediumMarginBottom"
+            >
+                <content>
+
+                    <List
+                        id="upcomingHolidayList"
+                        items="{
+                            path: '/Holidays',
+                            parameters: {
+                                $orderby: 'holidayDate asc',
+                                $top: 5
+                            }
+                        }"
+                        noDataText="No upcoming holidays found"
+                    >
+
+                        <StandardListItem
+                            title="{name}"
+                            description="{holidayType}"
+                            info="{location}"
+                            icon="sap-icon://calendar"
+                            type="Navigation"
+                            press=".onHolidayPress"
+                        >
+                            <customData>
+                                <core:CustomData
+                                    key="holidayId"
+                                    value="{holidayId}"
+                                />
+                            </customData>
+                        </StandardListItem>
+
+                    </List>
+
+                </content>
+            </Panel>
+
+        </content>
+
+        <!-- =========================
+             FOOTER
+        ========================== -->
+        <footer>
+            <Toolbar>
+                <ToolbarSpacer />
+
+                <Button
+                    text="Refresh"
+                    icon="sap-icon://refresh"
+                    press=".onRefresh"
+                />
+            </Toolbar>
+        </footer>
+
+    </Page>
+</mvc:View>

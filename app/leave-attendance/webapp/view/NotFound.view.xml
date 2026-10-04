@@ -1,0 +1,81 @@
+<mvc:View
+    controllerName="com.mandeep.leaveattendance.controller.NotFound"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+>
+    <Page
+        id="notFoundPage"
+        title="Page Not Found"
+        showNavButton="true"
+        navButtonPress=".onBack"
+        class="sapUiResponsiveContentPadding"
+    >
+
+        <content>
+
+            <VBox
+                id="notFoundContainer"
+                width="100%"
+                height="100%"
+                alignItems="Center"
+                justifyContent="Center"
+                class="sapUiLargeMarginTop"
+            >
+                <!-- Error Title -->
+                <Title
+                    id="notFoundTitle"
+                    text="Page Not Found"
+                    level="H1"
+                    class="sapUiSmallMarginBottom"
+                />
+
+                <!-- Error Description -->
+                <Text
+                    id="notFoundMessage"
+                    text="The page you are looking for could not be found."
+                    textAlign="Center"
+                    width="30rem"
+                    wrapping="true"
+                    class="sapUiSmallMarginBottom"
+                />
+
+                <Text
+                    id="notFoundSuggestion"
+                    text="The page may have been moved, removed, or the URL may be incorrect."
+                    textAlign="Center"
+                    width="30rem"
+                    wrapping="true"
+                    class="sapUiSmallMarginBottom"
+                />
+
+                <!-- Actions -->
+                <HBox
+                    id="notFoundActions"
+                    justifyContent="Center"
+                    class="sapUiMediumMarginTop"
+                >
+
+                    <Button
+                        id="notFoundHomeButton"
+                        text="Go to Dashboard"
+                        icon="sap-icon://home"
+                        type="Emphasized"
+                        press=".onGoToDashboard"
+                        class="sapUiTinyMarginEnd"
+                    />
+
+                    <Button
+                        id="notFoundBackButton"
+                        text="Go Back"
+                        icon="sap-icon://nav-back"
+                        press=".onBack"
+                    />
+
+                </HBox>
+
+            </VBox>
+
+        </content>
+
+    </Page>
+</mvc:View>

@@ -1,0 +1,746 @@
+<mvc:View
+    controllerName="com.mandeep.leaveattendance.controller.LeaveRequests"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Page
+        id="leaveRequestsPage"
+        title="Leave Requests"
+        showNavButton="true"
+        navButtonPress=".onBack"
+        class="sapUiResponsiveContentPadding"
+    >
+
+        <!-- =========================
+             HEADER ACTIONS
+        ========================== -->
+        <headerContent>
+
+            <Button
+                id="refreshLeaveRequestsButton"
+                icon="sap-icon://refresh"
+                tooltip="Refresh"
+                press=".onRefresh"
+            />
+
+            <Button
+                id="createLeaveRequestButton"
+                text="Apply Leave"
+                icon="sap-icon://add"
+                type="Emphasized"
+                press=".onCreateLeaveRequest"
+            />
+
+        </headerContent>
+
+        <content>
+
+            <!-- =========================
+                 PAGE HEADER
+            ========================== -->
+            <VBox
+                id="leaveRequestsHeaderSection"
+                class="sapUiMediumMarginBottom"
+            >
+                <Title
+                    text="Leave Requests"
+                    level="H1"
+                    class="sapUiSmallMarginBottom"
+                />
+
+                <Text
+                    text="Create, track, and manage employee leave requests."
+                />
+            </VBox>
+
+            <!-- =========================
+                 KPI CARDS
+            ========================== -->
+            <HBox
+                id="leaveRequestKpiContainer"
+                wrap="Wrap"
+                class="sapUiMediumMarginBottom"
+            >
+
+                <!-- Total Requests -->
+                <VBox
+                    id="totalLeaveRequestsCard"
+                    width="15rem"
+                    class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                >
+                    <GenericTile
+                        id="totalLeaveRequestsTile"
+                        header="Total Requests"
+                        subheader="All leave requests"
+                        press=".onTotalRequestsPress"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{viewModel>/totalRequests}"
+                                icon="sap-icon://request"
+                                valueColor="Neutral"
+                            />
+                        </TileContent>
+                    </GenericTile>
+                </VBox>
+
+                <!-- Draft -->
+                <VBox
+                    id="draftLeaveRequestsCard"
+                    width="15rem"
+                    class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                >
+                    <GenericTile
+                        id="draftLeaveRequestsTile"
+                        header="Draft"
+                        subheader="Not submitted"
+                        press=".onDraftRequestsPress"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{viewModel>/draftRequests}"
+                                icon="sap-icon://edit"
+                                valueColor="Neutral"
+                            />
+                        </TileContent>
+                    </GenericTile>
+                </VBox>
+
+                <!-- Pending -->
+                <VBox
+                    id="pendingLeaveRequestsCard"
+                    width="15rem"
+                    class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                >
+                    <GenericTile
+                        id="pendingLeaveRequestsTile"
+                        header="Pending"
+                        subheader="Awaiting approval"
+                        press=".onPendingRequestsPress"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{viewModel>/pendingRequests}"
+                                icon="sap-icon://pending"
+                                valueColor="Critical"
+                            />
+                        </TileContent>
+                    </GenericTile>
+                </VBox>
+
+                <!-- Approved -->
+                <VBox
+                    id="approvedLeaveRequestsCard"
+                    width="15rem"
+                    class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                >
+                    <GenericTile
+                        id="approvedLeaveRequestsTile"
+                        header="Approved"
+                        subheader="Approved requests"
+                        press=".onApprovedRequestsPress"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{viewModel>/approvedRequests}"
+                                icon="sap-icon://accept"
+                                valueColor="Good"
+                            />
+                        </TileContent>
+                    </GenericTile>
+                </VBox>
+
+                <!-- Rejected -->
+                <VBox
+                    id="rejectedLeaveRequestsCard"
+                    width="15rem"
+                    class="sapUiSmallMarginBottom"
+                >
+                    <GenericTile
+                        id="rejectedLeaveRequestsTile"
+                        header="Rejected"
+                        subheader="Rejected requests"
+                        press=".onRejectedRequestsPress"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{viewModel>/rejectedRequests}"
+                                icon="sap-icon://decline"
+                                valueColor="Error"
+                            />
+                        </TileContent>
+                    </GenericTile>
+                </VBox>
+
+            </HBox>
+
+            <!-- =========================
+                 FILTER SECTION
+            ========================== -->
+            <Panel
+                id="leaveRequestFilterPanel"
+                headerText="Search & Filter"
+                expandable="true"
+                expanded="true"
+                class="sapUiMediumMarginBottom"
+            >
+                <content>
+
+                    <HBox
+                        id="leaveRequestFilterRow"
+                        wrap="Wrap"
+                        alignItems="End"
+                    >
+
+                        <!-- Search -->
+                        <VBox
+                            id="leaveRequestSearchContainer"
+                            width="20rem"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                        >
+                            <Label
+                                text="Search"
+                                labelFor="leaveRequestSearchInput"
+                            />
+
+                            <SearchField
+                                id="leaveRequestSearchInput"
+                                width="100%"
+                                placeholder="Search request, employee..."
+                                liveChange=".onSearch"
+                            />
+                        </VBox>
+
+                        <!-- Employee ID -->
+                        <VBox
+                            id="leaveRequestEmployeeFilterContainer"
+                            width="14rem"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                        >
+                            <Label
+                                text="Employee ID"
+                                labelFor="leaveRequestEmployeeInput"
+                            />
+
+                            <Input
+                                id="leaveRequestEmployeeInput"
+                                width="100%"
+                                placeholder="EMP001"
+                            />
+                        </VBox>
+
+                        <!-- Leave Type -->
+                        <VBox
+                            id="leaveRequestTypeFilterContainer"
+                            width="16rem"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                        >
+                            <Label
+                                text="Leave Type"
+                                labelFor="leaveRequestTypeSelect"
+                            />
+
+                            <Select
+                                id="leaveRequestTypeSelect"
+                                width="100%"
+                                selectedKey=""
+                                change=".onFilterChange"
+                            >
+                                <items>
+
+                                    <core:Item
+                                        key=""
+                                        text="All Leave Types"
+                                    />
+
+                                    <core:Item
+                                        key="LT001"
+                                        text="Annual Leave"
+                                    />
+
+                                    <core:Item
+                                        key="LT002"
+                                        text="Sick Leave"
+                                    />
+
+                                    <core:Item
+                                        key="LT003"
+                                        text="Casual Leave"
+                                    />
+
+                                    <core:Item
+                                        key="LT004"
+                                        text="Maternity Leave"
+                                    />
+
+                                    <core:Item
+                                        key="LT005"
+                                        text="Paternity Leave"
+                                    />
+
+                                    <core:Item
+                                        key="LT006"
+                                        text="Compensatory Leave"
+                                    />
+
+                                    <core:Item
+                                        key="LT007"
+                                        text="Bereavement Leave"
+                                    />
+
+                                    <core:Item
+                                        key="LT008"
+                                        text="Unpaid Leave"
+                                    />
+
+                                    <core:Item
+                                        key="LT009"
+                                        text="Study Leave"
+                                    />
+
+                                    <core:Item
+                                        key="LT010"
+                                        text="Work From Home"
+                                    />
+
+                                </items>
+                            </Select>
+                        </VBox>
+
+                        <!-- Status -->
+                        <VBox
+                            id="leaveRequestStatusFilterContainer"
+                            width="14rem"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                        >
+                            <Label
+                                text="Status"
+                                labelFor="leaveRequestStatusSelect"
+                            />
+
+                            <Select
+                                id="leaveRequestStatusSelect"
+                                width="100%"
+                                selectedKey=""
+                            >
+                                <items>
+
+                                    <core:Item
+                                        key=""
+                                        text="All Statuses"
+                                    />
+
+                                    <core:Item
+                                        key="DRAFT"
+                                        text="Draft"
+                                    />
+
+                                    <core:Item
+                                        key="PENDING"
+                                        text="Pending"
+                                    />
+
+                                    <core:Item
+                                        key="APPROVED"
+                                        text="Approved"
+                                    />
+
+                                    <core:Item
+                                        key="REJECTED"
+                                        text="Rejected"
+                                    />
+
+                                </items>
+                            </Select>
+                        </VBox>
+
+                        <!-- Year -->
+                        <VBox
+                            id="leaveRequestYearFilterContainer"
+                            width="10rem"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                        >
+                            <Label
+                                text="Year"
+                                labelFor="leaveRequestYearInput"
+                            />
+
+                            <Input
+                                id="leaveRequestYearInput"
+                                width="100%"
+                                type="Number"
+                                placeholder="2026"
+                            />
+                        </VBox>
+
+                        <!-- Filter Buttons -->
+                        <HBox
+                            id="leaveRequestFilterButtons"
+                            class="sapUiSmallMarginBottom"
+                            alignItems="Center"
+                        >
+
+                            <Button
+                                id="applyLeaveRequestFilterButton"
+                                text="Apply"
+                                icon="sap-icon://filter"
+                                type="Emphasized"
+                                press=".onApplyFilter"
+                                class="sapUiTinyMarginEnd"
+                            />
+
+                            <Button
+                                id="clearLeaveRequestFilterButton"
+                                text="Clear"
+                                icon="sap-icon://clear-filter"
+                                press=".onClearFilter"
+                            />
+
+                        </HBox>
+
+                    </HBox>
+
+                </content>
+            </Panel>
+
+            <!-- =========================
+                 LEAVE REQUEST TABLE
+            ========================== -->
+            <Panel
+                id="leaveRequestTablePanel"
+                headerText="Leave Request List"
+                class="sapUiMediumMarginBottom"
+            >
+
+                <headerToolbar>
+                    <Toolbar>
+
+                        <Title
+                            text="Leave Requests"
+                            level="H3"
+                        />
+
+                        <ToolbarSpacer />
+
+                        <Button
+                            id="exportLeaveRequestsButton"
+                            text="Export"
+                            icon="sap-icon://excel-attachment"
+                            press=".onExport"
+                            class="sapUiTinyMarginEnd"
+                        />
+
+                        <Button
+                            id="refreshLeaveRequestTableButton"
+                            icon="sap-icon://refresh"
+                            tooltip="Refresh"
+                            press=".onRefresh"
+                        />
+
+                    </Toolbar>
+                </headerToolbar>
+
+                <content>
+
+                    <Table
+                        id="leaveRequestsTable"
+                        items="{
+                            path: '/LeaveRequests',
+                            parameters: {
+                                $expand: 'employee,leaveType',
+                                $orderby: 'requestId asc'
+                            }
+                        }"
+                        growing="true"
+                        growingThreshold="10"
+                        growingScrollToLoad="true"
+                        mode="None"
+                        noDataText="No leave requests found"
+                    >
+
+                        <columns>
+
+                            <Column width="9rem">
+                                <Text text="Request ID" />
+                            </Column>
+
+                            <Column width="12rem">
+                                <Text text="Employee ID" />
+                            </Column>
+
+                            <Column width="18rem">
+                                <Text text="Employee" />
+                            </Column>
+
+                            <Column width="16rem">
+                                <Text text="Leave Type" />
+                            </Column>
+
+                            <Column width="11rem">
+                                <Text text="From Date" />
+                            </Column>
+
+                            <Column width="11rem">
+                                <Text text="To Date" />
+                            </Column>
+
+                            <Column
+                                width="10rem"
+                                hAlign="Center"
+                            >
+                                <Text text="Days" />
+                            </Column>
+
+                            <Column width="11rem">
+                                <Text text="Status" />
+                            </Column>
+
+                            <Column
+                                width="7rem"
+                                hAlign="Center"
+                            >
+                                <Text text="Action" />
+                            </Column>
+
+                        </columns>
+
+                        <items>
+
+                            <ColumnListItem
+                                type="Navigation"
+                                press=".onLeaveRequestPress"
+                            >
+
+                                <!-- Request ID -->
+                                <cells>
+                                    <ObjectIdentifier
+                                        title="{requestId}"
+                                    />
+                                </cells>
+
+                                <!-- Employee ID -->
+                                <cells>
+                                    <ObjectIdentifier
+                                        title="{employee/employeeId}"
+                                    />
+                                </cells>
+
+                                <!-- Employee -->
+                                <cells>
+                                    <VBox>
+
+                                        <Text
+                                            text="{
+                                                = ${employee/firstName}
+                                                + ' '
+                                                + ${employee/lastName}
+                                            }"
+                                        />
+
+                                        <Text
+                                            text="{employee/designation}"
+                                            class="sapUiTinyMarginTop"
+                                        />
+
+                                    </VBox>
+                                </cells>
+
+                                <!-- Leave Type -->
+                                <cells>
+                                    <VBox>
+
+                                        <Text
+                                            text="{leaveType/name}"
+                                        />
+
+                                        <Text
+                                            text="{leaveType/leaveTypeId}"
+                                            class="sapUiTinyMarginTop"
+                                        />
+
+                                    </VBox>
+                                </cells>
+
+                                <!-- From Date -->
+                                <cells>
+                                    <Text
+                                        text="{
+                                            path: 'fromDate',
+                                            type: 'sap.ui.model.type.Date',
+                                            formatOptions: {
+                                                pattern: 'dd MMM yyyy'
+                                            }
+                                        }"
+                                    />
+                                </cells>
+
+                                <!-- To Date -->
+                                <cells>
+                                    <Text
+                                        text="{
+                                            path: 'toDate',
+                                            type: 'sap.ui.model.type.Date',
+                                            formatOptions: {
+                                                pattern: 'dd MMM yyyy'
+                                            }
+                                        }"
+                                    />
+                                </cells>
+
+                                <!-- Requested Days -->
+                                <cells>
+                                    <ObjectNumber
+                                        number="{requestedDays}"
+                                        unit="days"
+                                    />
+                                </cells>
+
+                                <!-- Status -->
+                                <cells>
+                                    <ObjectStatus
+                                        text="{status}"
+                                    />
+                                </cells>
+
+                                <!-- Action -->
+                                <cells>
+                                    <Button
+                                        icon="sap-icon://display"
+                                        type="Transparent"
+                                        tooltip="View Request"
+                                        press=".onLeaveRequestPress"
+                                    />
+                                </cells>
+
+                            </ColumnListItem>
+
+                        </items>
+
+                    </Table>
+
+                </content>
+
+            </Panel>
+
+            <!-- =========================
+                 PENDING REQUESTS
+            ========================== -->
+            <Panel
+                id="pendingLeaveRequestPanel"
+                headerText="Pending Approvals"
+                expandable="true"
+                expanded="true"
+                class="sapUiMediumMarginBottom"
+            >
+
+                <content>
+
+                    <List
+                        id="pendingLeaveRequestList"
+                        items="{
+                            path: '/LeaveRequests',
+                            parameters: {
+                                $expand: 'employee,leaveType',
+                                $orderby: 'submittedAt asc',
+                                $top: 5
+                            }
+                        }"
+                        noDataText="No pending leave requests"
+                    >
+
+                        <CustomListItem
+                            type="Navigation"
+                            press=".onLeaveRequestPress"
+                        >
+
+                            <HBox
+                                alignItems="Center"
+                                justifyContent="SpaceBetween"
+                                width="100%"
+                                class="sapUiSmallMargin"
+                            >
+
+                                <HBox
+                                    alignItems="Center"
+                                >
+
+                                    <Avatar
+                                        displaySize="S"
+                                        displayShape="Circle"
+                                        class="sapUiSmallMarginEnd"
+                                    />
+
+                                    <VBox>
+
+                                        <Title
+                                            text="{requestId}"
+                                            level="H5"
+                                        />
+
+                                        <Text
+                                            text="{
+                                                = ${employee/firstName}
+                                                + ' '
+                                                + ${employee/lastName}
+                                            }"
+                                        />
+
+                                        <Text
+                                            text="{leaveType/name}"
+                                            class="sapUiTinyMarginTop"
+                                        />
+
+                                    </VBox>
+
+                                </HBox>
+
+                                <VBox
+                                    alignItems="End"
+                                >
+
+                                    <ObjectNumber
+                                        number="{requestedDays}"
+                                        unit="days"
+                                    />
+
+                                    <ObjectStatus
+                                        text="{status}"
+                                        class="sapUiTinyMarginTop"
+                                    />
+
+                                </VBox>
+
+                            </HBox>
+
+                        </CustomListItem>
+
+                    </List>
+
+                </content>
+
+            </Panel>
+
+        </content>
+
+        <!-- =========================
+             FOOTER
+        ========================== -->
+        <footer>
+
+            <Toolbar>
+
+                <ToolbarSpacer />
+
+                <Button
+                    text="Refresh"
+                    icon="sap-icon://refresh"
+                    press=".onRefresh"
+                />
+
+            </Toolbar>
+
+        </footer>
+
+    </Page>
+</mvc:View>

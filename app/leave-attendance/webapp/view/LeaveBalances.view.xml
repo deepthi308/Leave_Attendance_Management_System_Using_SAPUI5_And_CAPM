@@ -1,0 +1,667 @@
+<mvc:View
+    controllerName="com.mandeep.leaveattendance.controller.LeaveBalances"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Page
+        id="leaveBalancesPage"
+        title="Leave Balance Management"
+        showNavButton="true"
+        navButtonPress=".onBack"
+        class="sapUiResponsiveContentPadding"
+    >
+
+        <!-- =========================
+             HEADER ACTIONS
+        ========================== -->
+        <headerContent>
+            <Button
+                id="refreshLeaveBalancesButton"
+                icon="sap-icon://refresh"
+                tooltip="Refresh"
+                press=".onRefresh"
+            />
+
+            <Button
+                id="recalculateAllBalancesButton"
+                text="Recalculate"
+                icon="sap-icon://synchronize"
+                type="Emphasized"
+                press=".onRecalculateBalances"
+            />
+        </headerContent>
+
+        <content>
+
+            <!-- =========================
+                 PAGE HEADER
+            ========================== -->
+            <VBox
+                id="leaveBalanceHeaderSection"
+                class="sapUiMediumMarginBottom"
+            >
+                <Title
+                    text="Leave Balance Management"
+                    level="H1"
+                    class="sapUiSmallMarginBottom"
+                />
+
+                <Text
+                    text="View employee leave entitlements, usage, pending requests, and available balances."
+                />
+            </VBox>
+
+            <!-- =========================
+                 KPI CARDS
+            ========================== -->
+            <HBox
+                id="leaveBalanceKpiContainer"
+                wrap="Wrap"
+                class="sapUiMediumMarginBottom"
+            >
+
+                <!-- Total Balance Records -->
+                <VBox
+                    id="totalBalanceRecordsCard"
+                    width="15rem"
+                    class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                >
+                    <GenericTile
+                        id="totalBalanceRecordsTile"
+                        header="Total Records"
+                        subheader="Leave balance records"
+                        press=".onTotalRecordsPress"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{viewModel>/totalBalanceRecords}"
+                                icon="sap-icon://database"
+                                valueColor="Neutral"
+                            />
+                        </TileContent>
+                    </GenericTile>
+                </VBox>
+
+                <!-- Total Entitlement -->
+                <VBox
+                    id="totalEntitlementCard"
+                    width="15rem"
+                    class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                >
+                    <GenericTile
+                        id="totalEntitlementTile"
+                        header="Total Entitlement"
+                        subheader="Allocated leave days"
+                        press=".onTotalEntitlementPress"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{viewModel>/totalEntitlement}"
+                                icon="sap-icon://calendar"
+                                valueColor="Good"
+                            />
+                        </TileContent>
+                    </GenericTile>
+                </VBox>
+
+                <!-- Used Days -->
+                <VBox
+                    id="usedLeaveDaysCard"
+                    width="15rem"
+                    class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                >
+                    <GenericTile
+                        id="usedLeaveDaysTile"
+                        header="Used Days"
+                        subheader="Leave already used"
+                        press=".onUsedDaysPress"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{viewModel>/usedDays}"
+                                icon="sap-icon://complete"
+                                valueColor="Critical"
+                            />
+                        </TileContent>
+                    </GenericTile>
+                </VBox>
+
+                <!-- Pending Days -->
+                <VBox
+                    id="pendingLeaveDaysCard"
+                    width="15rem"
+                    class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                >
+                    <GenericTile
+                        id="pendingLeaveDaysTile"
+                        header="Pending Days"
+                        subheader="Awaiting approval"
+                        press=".onPendingDaysPress"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{viewModel>/pendingDays}"
+                                icon="sap-icon://pending"
+                                valueColor="Critical"
+                            />
+                        </TileContent>
+                    </GenericTile>
+                </VBox>
+
+                <!-- Available Days -->
+                <VBox
+                    id="availableLeaveDaysCard"
+                    width="15rem"
+                    class="sapUiSmallMarginBottom"
+                >
+                    <GenericTile
+                        id="availableLeaveDaysTile"
+                        header="Available Days"
+                        subheader="Remaining leave"
+                        press=".onAvailableDaysPress"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{viewModel>/availableDays}"
+                                icon="sap-icon://accept"
+                                valueColor="Good"
+                            />
+                        </TileContent>
+                    </GenericTile>
+                </VBox>
+
+            </HBox>
+
+            <!-- =========================
+                 FILTER SECTION
+            ========================== -->
+            <Panel
+                id="leaveBalanceFilterPanel"
+                headerText="Search & Filter"
+                expandable="true"
+                expanded="true"
+                class="sapUiMediumMarginBottom"
+            >
+                <content>
+
+                    <HBox
+                        id="leaveBalanceFilterRow"
+                        wrap="Wrap"
+                        alignItems="End"
+                    >
+
+                        <!-- Search -->
+                        <VBox
+                            id="leaveBalanceSearchContainer"
+                            width="20rem"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                        >
+                            <Label
+                                text="Search Employee"
+                                labelFor="leaveBalanceSearchInput"
+                            />
+
+                            <SearchField
+                                id="leaveBalanceSearchInput"
+                                width="100%"
+                                placeholder="Search by employee ID or name..."
+                                liveChange=".onSearch"
+                            />
+                        </VBox>
+
+                        <!-- Employee ID -->
+                        <VBox
+                            id="leaveBalanceEmployeeIdContainer"
+                            width="14rem"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                        >
+                            <Label
+                                text="Employee ID"
+                                labelFor="leaveBalanceEmployeeIdInput"
+                            />
+
+                            <Input
+                                id="leaveBalanceEmployeeIdInput"
+                                placeholder="EMP001"
+                                width="100%"
+                            />
+                        </VBox>
+
+                        <!-- Leave Type -->
+                        <VBox
+                            id="leaveBalanceLeaveTypeContainer"
+                            width="16rem"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                        >
+                            <Label
+                                text="Leave Type"
+                                labelFor="leaveBalanceLeaveTypeSelect"
+                            />
+
+                            <Select
+                                id="leaveBalanceLeaveTypeSelect"
+                                width="100%"
+                                selectedKey=""
+                                change=".onFilterChange"
+                            >
+                                <items>
+                                    <core:Item
+                                        key=""
+                                        text="All Leave Types"
+                                    />
+                                    <core:Item
+                                        key="LT001"
+                                        text="Annual Leave"
+                                    />
+                                    <core:Item
+                                        key="LT002"
+                                        text="Sick Leave"
+                                    />
+                                    <core:Item
+                                        key="LT003"
+                                        text="Casual Leave"
+                                    />
+                                    <core:Item
+                                        key="LT004"
+                                        text="Maternity Leave"
+                                    />
+                                    <core:Item
+                                        key="LT005"
+                                        text="Paternity Leave"
+                                    />
+                                    <core:Item
+                                        key="LT006"
+                                        text="Compensatory Leave"
+                                    />
+                                    <core:Item
+                                        key="LT007"
+                                        text="Bereavement Leave"
+                                    />
+                                    <core:Item
+                                        key="LT008"
+                                        text="Unpaid Leave"
+                                    />
+                                    <core:Item
+                                        key="LT009"
+                                        text="Study Leave"
+                                    />
+                                    <core:Item
+                                        key="LT010"
+                                        text="Work From Home"
+                                    />
+                                </items>
+                            </Select>
+                        </VBox>
+
+                        <!-- Year -->
+                        <VBox
+                            id="leaveBalanceYearContainer"
+                            width="10rem"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                        >
+                            <Label
+                                text="Year"
+                                labelFor="leaveBalanceYearInput"
+                            />
+
+                            <Input
+                                id="leaveBalanceYearInput"
+                                type="Number"
+                                placeholder="2026"
+                                width="100%"
+                            />
+                        </VBox>
+
+                        <!-- Filter Buttons -->
+                        <HBox
+                            id="leaveBalanceFilterButtons"
+                            class="sapUiSmallMarginBottom"
+                            alignItems="Center"
+                        >
+                            <Button
+                                id="applyLeaveBalanceFilterButton"
+                                text="Apply"
+                                icon="sap-icon://filter"
+                                type="Emphasized"
+                                press=".onApplyFilter"
+                                class="sapUiTinyMarginEnd"
+                            />
+
+                            <Button
+                                id="clearLeaveBalanceFilterButton"
+                                text="Clear"
+                                icon="sap-icon://clear-filter"
+                                press=".onClearFilter"
+                            />
+                        </HBox>
+
+                    </HBox>
+
+                </content>
+            </Panel>
+
+            <!-- =========================
+                 LEAVE BALANCE TABLE
+            ========================== -->
+            <Panel
+                id="leaveBalanceTablePanel"
+                headerText="Employee Leave Balances"
+                class="sapUiMediumMarginBottom"
+            >
+                <headerToolbar>
+                    <Toolbar>
+                        <Title
+                            text="Leave Balances"
+                            level="H3"
+                        />
+
+                        <ToolbarSpacer />
+
+                        <Button
+                            id="exportLeaveBalancesButton"
+                            text="Export"
+                            icon="sap-icon://excel-attachment"
+                            press=".onExport"
+                            class="sapUiTinyMarginEnd"
+                        />
+
+                        <Button
+                            id="refreshLeaveBalanceTableButton"
+                            icon="sap-icon://refresh"
+                            tooltip="Refresh"
+                            press=".onRefresh"
+                        />
+                    </Toolbar>
+                </headerToolbar>
+
+                <content>
+
+                    <Table
+                        id="leaveBalancesTable"
+                        items="{
+                            path: '/LeaveBalances',
+                            parameters: {
+                                $expand: 'employee,leaveType',
+                                $orderby: 'employee/employeeId asc,leaveType/leaveTypeId asc'
+                            }
+                        }"
+                        growing="true"
+                        growingThreshold="10"
+                        growingScrollToLoad="true"
+                        mode="None"
+                        noDataText="No leave balance records found"
+                    >
+
+                        <columns>
+
+                            <Column width="9rem">
+                                <Text text="Balance ID" />
+                            </Column>
+
+                            <Column width="11rem">
+                                <Text text="Employee ID" />
+                            </Column>
+
+                            <Column width="17rem">
+                                <Text text="Employee" />
+                            </Column>
+
+                            <Column width="16rem">
+                                <Text text="Leave Type" />
+                            </Column>
+
+                            <Column
+                                width="7rem"
+                                hAlign="Center"
+                            >
+                                <Text text="Year" />
+                            </Column>
+
+                            <Column
+                                width="9rem"
+                                hAlign="Center"
+                            >
+                                <Text text="Total Days" />
+                            </Column>
+
+                            <Column
+                                width="9rem"
+                                hAlign="Center"
+                            >
+                                <Text text="Used Days" />
+                            </Column>
+
+                            <Column
+                                width="10rem"
+                                hAlign="Center"
+                            >
+                                <Text text="Pending Days" />
+                            </Column>
+
+                            <Column
+                                width="11rem"
+                                hAlign="Center"
+                            >
+                                <Text text="Available Days" />
+                            </Column>
+
+                            <Column
+                                width="7rem"
+                                hAlign="Center"
+                            >
+                                <Text text="Action" />
+                            </Column>
+
+                        </columns>
+
+                        <items>
+
+                            <ColumnListItem
+                                type="Navigation"
+                                press=".onLeaveBalancePress"
+                            >
+
+                                <!-- Balance ID -->
+                                <cells>
+                                    <ObjectIdentifier
+                                        title="{balanceId}"
+                                    />
+                                </cells>
+
+                                <!-- Employee ID -->
+                                <cells>
+                                    <ObjectIdentifier
+                                        title="{employee/employeeId}"
+                                    />
+                                </cells>
+
+                                <!-- Employee -->
+                                <cells>
+                                    <VBox>
+                                        <Text
+                                            text="{
+                                                = ${employee/firstName}
+                                                + ' '
+                                                + ${employee/lastName}
+                                            }"
+                                        />
+
+                                        <Text
+                                            text="{employee/designation}"
+                                            class="sapUiTinyMarginTop"
+                                        />
+                                    </VBox>
+                                </cells>
+
+                                <!-- Leave Type -->
+                                <cells>
+                                    <VBox>
+                                        <Text
+                                            text="{leaveType/name}"
+                                        />
+
+                                        <Text
+                                            text="{leaveType/leaveTypeId}"
+                                            class="sapUiTinyMarginTop"
+                                        />
+                                    </VBox>
+                                </cells>
+
+                                <!-- Year -->
+                                <cells>
+                                    <ObjectNumber
+                                        number="{year}"
+                                    />
+                                </cells>
+
+                                <!-- Total Days -->
+                                <cells>
+                                    <ObjectNumber
+                                        number="{totalDays}"
+                                        unit="days"
+                                    />
+                                </cells>
+
+                                <!-- Used Days -->
+                                <cells>
+                                    <ObjectNumber
+                                        number="{usedDays}"
+                                        unit="days"
+                                    />
+                                </cells>
+
+                                <!-- Pending Days -->
+                                <cells>
+                                    <ObjectNumber
+                                        number="{pendingDays}"
+                                        unit="days"
+                                    />
+                                </cells>
+
+                                <!-- Available Days -->
+                                <cells>
+                                    <ObjectNumber
+                                        number="{availableDays}"
+                                        unit="days"
+                                    />
+                                </cells>
+
+                                <!-- Action -->
+                                <cells>
+                                    <Button
+                                        icon="sap-icon://display"
+                                        type="Transparent"
+                                        tooltip="View Balance"
+                                        press=".onLeaveBalancePress"
+                                    />
+                                </cells>
+
+                            </ColumnListItem>
+
+                        </items>
+
+                    </Table>
+
+                </content>
+            </Panel>
+
+            <!-- =========================
+                 BALANCE SUMMARY
+            ========================== -->
+            <Panel
+                id="leaveBalanceSummaryPanel"
+                headerText="Balance Summary"
+                expandable="true"
+                expanded="true"
+                class="sapUiMediumMarginBottom"
+            >
+                <content>
+
+                    <HBox
+                        id="balanceSummaryContainer"
+                        wrap="Wrap"
+                    >
+
+                        <VBox
+                            width="20rem"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                        >
+                            <Label
+                                text="Total Entitled"
+                            />
+
+                            <ObjectNumber
+                                number="{viewModel>/totalEntitlement}"
+                                unit="days"
+                                emphasized="true"
+                            />
+                        </VBox>
+
+                        <VBox
+                            width="20rem"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                        >
+                            <Label
+                                text="Total Used"
+                            />
+
+                            <ObjectNumber
+                                number="{viewModel>/usedDays}"
+                                unit="days"
+                            />
+                        </VBox>
+
+                        <VBox
+                            width="20rem"
+                            class="sapUiSmallMarginEnd sapUiSmallMarginBottom"
+                        >
+                            <Label
+                                text="Total Pending"
+                            />
+
+                            <ObjectNumber
+                                number="{viewModel>/pendingDays}"
+                                unit="days"
+                            />
+                        </VBox>
+
+                        <VBox
+                            width="20rem"
+                            class="sapUiSmallMarginBottom"
+                        >
+                            <Label
+                                text="Total Available"
+                            />
+
+                            <ObjectNumber
+                                number="{viewModel>/availableDays}"
+                                unit="days"
+                                emphasized="true"
+                            />
+                        </VBox>
+
+                    </HBox>
+
+                </content>
+            </Panel>
+
+        </content>
+
+        <!-- =========================
+             FOOTER
+        ========================== -->
+        <footer>
+            <Toolbar>
+                <ToolbarSpacer />
+
+                <Button
+                    text="Refresh"
+                    icon="sap-icon://refresh"
+                    press=".onRefresh"
+                />
+            </Toolbar>
+        </footer>
+
+    </Page>
+</mvc:View>

@@ -1,0 +1,132 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Dialog
+        id="attendanceDialog"
+        title="Attendance Details"
+        contentWidth="32rem"
+    >
+        <content>
+            <VBox
+                width="100%"
+                class="sapUiMediumMargin"
+            >
+                <Label
+                    text="Employee ID"
+                    labelFor="attendanceEmployeeIdInput"
+                />
+
+                <Input
+                    id="attendanceEmployeeIdInput"
+                    width="100%"
+                    placeholder="Enter Employee ID"
+                    maxLength="20"
+                />
+
+                <Label
+                    text="Attendance Date"
+                    labelFor="attendanceDatePicker"
+                    class="sapUiSmallMarginTop"
+                />
+
+                <DatePicker
+                    id="attendanceDatePicker"
+                    width="100%"
+                    valueFormat="yyyy-MM-dd"
+                    displayFormat="dd MMM yyyy"
+                    value="{= ${/attendanceDate} || '' }"
+                />
+
+                <Label
+                    text="Check-In"
+                    labelFor="attendanceCheckInPicker"
+                    class="sapUiSmallMarginTop"
+                />
+
+                <DateTimePicker
+                    id="attendanceCheckInPicker"
+                    width="100%"
+                    displayFormat="dd MMM yyyy, HH:mm"
+                    valueFormat="yyyy-MM-dd'T'HH:mm:ss"
+                />
+
+                <Label
+                    text="Check-Out"
+                    labelFor="attendanceCheckOutPicker"
+                    class="sapUiSmallMarginTop"
+                />
+
+                <DateTimePicker
+                    id="attendanceCheckOutPicker"
+                    width="100%"
+                    displayFormat="dd MMM yyyy, HH:mm"
+                    valueFormat="yyyy-MM-dd'T'HH:mm:ss"
+                />
+
+                <Label
+                    text="Status"
+                    labelFor="attendanceStatusSelect"
+                    class="sapUiSmallMarginTop"
+                />
+
+                <Select
+                    id="attendanceStatusSelect"
+                    width="100%"
+                    selectedKey="PRESENT"
+                >
+                    <items>
+                        <core:Item
+                            key="PRESENT"
+                            text="Present"
+                        />
+                        <core:Item
+                            key="ABSENT"
+                            text="Absent"
+                        />
+                        <core:Item
+                            key="ON_LEAVE"
+                            text="On Leave"
+                        />
+                        <core:Item
+                            key="IN_PROGRESS"
+                            text="In Progress"
+                        />
+                    </items>
+                </Select>
+
+                <Label
+                    text="Remarks"
+                    labelFor="attendanceRemarksInput"
+                    class="sapUiSmallMarginTop"
+                />
+
+                <TextArea
+                    id="attendanceRemarksInput"
+                    width="100%"
+                    rows="4"
+                    maxLength="500"
+                    placeholder="Enter remarks"
+                />
+            </VBox>
+        </content>
+
+        <beginButton>
+            <Button
+                id="attendanceDialogSaveButton"
+                text="Save"
+                type="Emphasized"
+                icon="sap-icon://save"
+                press=".onSaveAttendance"
+            />
+        </beginButton>
+
+        <endButton>
+            <Button
+                id="attendanceDialogCancelButton"
+                text="Cancel"
+                press=".onCancelAttendance"
+            />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

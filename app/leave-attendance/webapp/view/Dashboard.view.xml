@@ -1,0 +1,523 @@
+<mvc:View
+    controllerName="com.mandeep.leaveattendance.controller.Dashboard"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Page
+        id="dashboardPage"
+        title="Leave Attendance Management"
+        showNavButton="false"
+    >
+        <content>
+            <VBox class="sapUiMediumMargin">
+                <!-- Dashboard Header -->
+                <HBox
+                    justifyContent="SpaceBetween"
+                    alignItems="Center"
+                >
+                    <VBox>
+                        <Title
+                            text="Dashboard"
+                            level="H1"
+                        />
+
+                        <Text
+                            text="Overview of employee leave and attendance"
+                            class="sapUiTinyMarginTop"
+                        />
+                    </VBox>
+
+                    <Button
+                        text="Refresh"
+                        icon="sap-icon://refresh"
+                        type="Transparent"
+                        press=".onRefresh"
+                    />
+                </HBox>
+
+                <!-- KPI CARDS -->
+
+                <HBox
+                    wrap="Wrap"
+                    class="sapUiMediumMarginTop"
+                >
+                    <!-- Total Employees -->
+                    <GenericTile
+                        header="Total Employees"
+                        subheader="Active employees"
+                        class="dashboardKpiTile sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                        press=".onEmployeesPress"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{viewModel>/totalEmployees}"
+                                icon="sap-icon://employee"
+                                valueColor="Neutral"
+                            />
+                        </TileContent>
+                    </GenericTile>
+
+                    <!-- Present Today -->
+                    <GenericTile
+                        header="Present Today"
+                        subheader="Employees checked in"
+                        class="dashboardKpiTile sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                        press=".onAttendancePress"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{viewModel>/presentToday}"
+                                icon="sap-icon://accept"
+                                valueColor="Good"
+                            />
+                        </TileContent>
+                    </GenericTile>
+
+                    <!-- On Leave -->
+                    <GenericTile
+                        header="On Leave"
+                        subheader="Employees on leave"
+                        class="dashboardKpiTile sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                        press=".onLeaveRequestsPress"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{viewModel>/onLeaveToday}"
+                                icon="sap-icon://calendar"
+                                valueColor="Critical"
+                            />
+                        </TileContent>
+                    </GenericTile>
+
+                    <!-- Absent -->
+                    <GenericTile
+                        header="Absent Today"
+                        subheader="Attendance not recorded"
+                        class="dashboardKpiTile sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                        press=".onAttendancePress"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{viewModel>/absentToday}"
+                                icon="sap-icon://decline"
+                                valueColor="Error"
+                            />
+                        </TileContent>
+                    </GenericTile>
+
+                    <!-- Pending Leave -->
+                    <GenericTile
+                        header="Pending Leave"
+                        subheader="Awaiting approval"
+                        class="dashboardKpiTile sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                        press=".onApprovalPress"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{viewModel>/pendingLeave}"
+                                icon="sap-icon://pending"
+                                valueColor="Critical"
+                            />
+                        </TileContent>
+                    </GenericTile>
+
+                    <!-- Attendance Corrections -->
+                    <GenericTile
+                        header="Attendance Corrections"
+                        subheader="Awaiting approval"
+                        class="dashboardKpiTile sapUiTinyMarginBottom"
+                        press=".onApprovalPress"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{viewModel>/pendingCorrections}"
+                                icon="sap-icon://time-entry-request"
+                                valueColor="Critical"
+                            />
+                        </TileContent>
+                    </GenericTile>
+                </HBox>
+
+                <!-- QUICK ACTIONS -->
+
+                <Panel
+                    headerText="Quick Actions"
+                    expandable="false"
+                    class="sapUiMediumMarginTop"
+                >
+                    <content>
+                        <HBox
+                            wrap="Wrap"
+                            class="sapUiSmallMargin"
+                        >
+                            <Button
+                                text="View Attendance"
+                                icon="sap-icon://employee"
+                                type="Emphasized"
+                                press=".onAttendancePress"
+                                class="sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                            />
+
+                            <Button
+                                text="Leave Requests"
+                                icon="sap-icon://calendar"
+                                type="Default"
+                                press=".onLeaveRequestsPress"
+                                class="sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                            />
+
+                            <Button
+                                text="Leave Balances"
+                                icon="sap-icon://credit-card"
+                                type="Default"
+                                press=".onLeaveBalancesPress"
+                                class="sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                            />
+
+                            <Button
+                                text="Approvals"
+                                icon="sap-icon://task"
+                                type="Default"
+                                press=".onApprovalPress"
+                                class="sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                            />
+
+                            <Button
+                                text="Employees"
+                                icon="sap-icon://group"
+                                type="Default"
+                                press=".onEmployeesPress"
+                                class="sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                            />
+
+                            <Button
+                                text="Holidays"
+                                icon="sap-icon://calendar-2"
+                                type="Default"
+                                press=".onHolidaysPress"
+                                class="sapUiTinyMarginBottom"
+                            />
+                        </HBox>
+                    </content>
+                </Panel>
+
+                <!-- TODAY'S ATTENDANCE -->
+
+                <Panel
+                    headerText="Today's Attendance"
+                    expandable="false"
+                    class="sapUiMediumMarginTop"
+                >
+                    <content>
+                        <Table
+                            id="todayAttendanceTable"
+                            items="{
+                                path: '/Attendance',
+                                parameters: {
+                                    $expand: 'employee'
+                                }
+                            }"
+                            growing="true"
+                            growingThreshold="5"
+                            noDataText="No attendance records available"
+                        >
+                            <headerToolbar>
+                                <OverflowToolbar>
+                                    <Title
+                                        text="Attendance Overview"
+                                        level="H3"
+                                    />
+
+                                    <ToolbarSpacer />
+
+                                    <Button
+                                        text="View All"
+                                        icon="sap-icon://navigation-right-arrow"
+                                        type="Transparent"
+                                        press=".onAttendancePress"
+                                    />
+                                </OverflowToolbar>
+                            </headerToolbar>
+
+                            <columns>
+                                <Column width="9rem">
+                                    <Text text="Employee ID" />
+                                </Column>
+
+                                <Column width="15rem">
+                                    <Text text="Employee" />
+                                </Column>
+
+                                <Column width="9rem">
+                                    <Text text="Check-In" />
+                                </Column>
+
+                                <Column width="9rem">
+                                    <Text text="Check-Out" />
+                                </Column>
+
+                                <Column width="9rem">
+                                    <Text text="Working Hours" />
+                                </Column>
+
+                                <Column width="9rem">
+                                    <Text text="Status" />
+                                </Column>
+                            </columns>
+
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <Text text="{employee/employeeId}" />
+
+                                        <VBox>
+                                            <Text
+                                                text="{employee/firstName} {employee/lastName}"
+                                            />
+
+                                            <Text
+                                                text="{employee/designation}"
+                                                class="secondaryText"
+                                            />
+                                        </VBox>
+
+                                        <Text
+                                            text="{
+                                                path: 'checkIn',
+                                                type: 'sap.ui.model.type.DateTime',
+                                                formatOptions: {
+                                                    style: 'short'
+                                                }
+                                            }"
+                                        />
+
+                                        <Text
+                                            text="{
+                                                path: 'checkOut',
+                                                type: 'sap.ui.model.type.DateTime',
+                                                formatOptions: {
+                                                    style: 'short'
+                                                }
+                                            }"
+                                        />
+
+                                        <ObjectNumber
+                                            number="{workingHours}"
+                                            unit="hrs"
+                                        />
+
+                                        <ObjectStatus
+                                            text="{status}"/>
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </content>
+                </Panel>
+
+                <!-- PENDING APPROVALS -->
+
+                <Panel
+                    headerText="Pending Approvals"
+                    expandable="false"
+                    class="sapUiMediumMarginTop"
+                >
+                    <content>
+                        <List
+                            id="pendingApprovalsList"
+                            noDataText="No pending approvals"
+                            items="{
+                                path: '/LeaveRequests',
+                                parameters: {
+                                    $expand: 'employee,leaveType'
+                                }
+                            }"
+                        >
+                            <headerToolbar>
+                                <OverflowToolbar>
+                                    <Title
+                                        text="Leave Requests Awaiting Approval"
+                                        level="H3"
+                                    />
+
+                                    <ToolbarSpacer />
+
+                                    <Button
+                                        text="View All"
+                                        icon="sap-icon://navigation-right-arrow"
+                                        type="Transparent"
+                                        press=".onApprovalPress"
+                                    />
+                                </OverflowToolbar>
+                            </headerToolbar>
+
+                            <items>
+                                <ObjectListItem
+                                    title="{requestId}"
+                                    intro="{employee/employeeId}"
+                                    number="{requestedDays}"
+                                    numberUnit="days"
+                                    type="Navigation"
+                                    press=".onLeaveRequestPress"
+                                >
+                                    <attributes>
+                                        <ObjectAttribute
+                                            text="{employee/firstName} {employee/lastName}"
+                                        />
+
+                                        <ObjectAttribute
+                                            text="{leaveType/name}"
+                                        />
+
+                                        <ObjectAttribute
+                                            text="{
+                                                path: 'fromDate',
+                                                type: 'sap.ui.model.type.Date',
+                                                formatOptions: {
+                                                    style: 'medium'
+                                                }
+                                            }"
+                                        />
+                                    </attributes>
+
+                                    <firstStatus>
+                                        <ObjectStatus
+                                            text="{status}"
+                                            state="Warning"
+                                        />
+                                    </firstStatus>
+                                </ObjectListItem>
+                            </items>
+                        </List>
+                    </content>
+                </Panel>
+
+                <!-- LEAVE BALANCE SUMMARY -->
+
+                <Panel
+                    headerText="Leave Balance Summary"
+                    expandable="false"
+                    class="sapUiMediumMarginTop"
+                >
+                    <content>
+                        <Table
+                            id="leaveBalanceSummaryTable"
+                            items="{
+                                path: '/LeaveBalances',
+                                parameters: {
+                                    $expand: 'employee,leaveType'
+                                }
+                            }"
+                            growing="true"
+                            growingThreshold="5"
+                            noDataText="No leave balance information available"
+                        >
+                            <columns>
+                                <Column>
+                                    <Text text="Employee" />
+                                </Column>
+
+                                <Column>
+                                    <Text text="Leave Type" />
+                                </Column>
+
+                                <Column hAlign="End">
+                                    <Text text="Total" />
+                                </Column>
+
+                                <Column hAlign="End">
+                                    <Text text="Used" />
+                                </Column>
+
+                                <Column hAlign="End">
+                                    <Text text="Pending" />
+                                </Column>
+
+                                <Column hAlign="End">
+                                    <Text text="Available" />
+                                </Column>
+                            </columns>
+
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <Text
+                                            text="{employee/firstName} {employee/lastName}"
+                                        />
+
+                                        <Text text="{leaveType/name}" />
+
+                                        <ObjectNumber
+                                            number="{totalDays}"
+                                            unit="days"
+                                        />
+
+                                        <ObjectNumber
+                                            number="{usedDays}"
+                                            unit="days"
+                                        />
+
+                                        <ObjectNumber
+                                            number="{pendingDays}"
+                                            unit="days"
+                                        />
+
+                                        <ObjectNumber
+                                            number="{availableDays}"
+                                            unit="days"
+                                            state="{path: 'availableDays', formatter: '.formatter.statusState'}"
+                                        />
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </content>
+                </Panel>
+
+                <!-- HOLIDAYS -->
+
+                <Panel
+                    headerText="Upcoming Holidays"
+                    expandable="false"
+                    class="sapUiMediumMarginTop"
+                >
+                    <content>
+                        <List
+                            id="upcomingHolidaysList"
+                            items="{
+                                path: '/Holidays',
+                                sorter: {
+                                    path: 'holidayDate'
+                                }
+                            }"
+                            growing="true"
+                            growingThreshold="5"
+                            noDataText="No upcoming holidays"
+                        >
+                            <items>
+                                <ObjectListItem
+                                    title="{name}"
+                                    intro="{holidayType}"
+                                    number="{
+                                        path: 'holidayDate',
+                                        type: 'sap.ui.model.type.Date',
+                                        formatOptions: {
+                                            style: 'medium'
+                                        }
+                                    }"
+                                >
+                                    <attributes>
+                                        <ObjectAttribute text="{location}" />
+
+                                        <ObjectAttribute text="{description}" />
+                                    </attributes>
+                                </ObjectListItem>
+                            </items>
+                        </List>
+                    </content>
+                </Panel>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

@@ -1,0 +1,866 @@
+<mvc:View
+    controllerName="com.mandeep.leaveattendance.controller.EmployeeDetail"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Page
+        id="employeeDetailPage"
+        title="Employee Details"
+        showNavButton="true"
+        navButtonPress=".onBack"
+    >
+
+        <content>
+
+            <VBox class="sapUiMediumMargin">
+
+                <!-- Employee Header -->
+                <HBox
+                    justifyContent="SpaceBetween"
+                    alignItems="Center"
+                    class="employeeDetailHeader"
+                >
+
+                    <HBox alignItems="Center">
+
+                        <Avatar
+                            displaySize="L"
+                            displayShape="Circle"
+                            class="sapUiSmallMarginEnd"
+                        />
+
+                        <VBox>
+
+                            <Title
+                                text="{employeeId}"
+                                level="H2"
+                            />
+
+                            <Text
+                                text="{firstName} {lastName}"
+                                class="sapUiTinyMarginTop"
+                            />
+
+                            <Text
+                                text="{designation}"
+                                class="sapUiTinyMarginTop secondaryText"
+                            />
+
+                        </VBox>
+
+                    </HBox>
+
+                    <ObjectStatus
+                        text="{status}"
+                        state="{
+                            = ${status} === 'ACTIVE'
+                                ? 'Success'
+                                : 'Error'
+                        }"
+                    />
+
+                </HBox>
+
+
+                <!-- Employee Information -->
+                <Panel
+                    headerText="Employee Information"
+                    expandable="false"
+                    class="sapUiMediumMarginTop"
+                >
+
+                    <content>
+
+                        <VBox class="sapUiSmallMargin">
+
+                            <HBox
+                                wrap="Wrap"
+                                justifyContent="SpaceBetween"
+                            >
+
+                                <!-- Employee ID -->
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="Employee ID" />
+
+                                    <Text
+                                        text="{employeeId}"
+                                        class="detailValue"
+                                    />
+
+                                </VBox>
+
+
+                                <!-- First Name -->
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="First Name" />
+
+                                    <Text
+                                        text="{firstName}"
+                                        class="detailValue"
+                                    />
+
+                                </VBox>
+
+
+                                <!-- Last Name -->
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="Last Name" />
+
+                                    <Text
+                                        text="{lastName}"
+                                        class="detailValue"
+                                    />
+
+                                </VBox>
+
+
+                                <!-- Email -->
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="Email" />
+
+                                    <Text
+                                        text="{email}"
+                                        class="detailValue"
+                                    />
+
+                                </VBox>
+
+
+                                <!-- Phone -->
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="Phone" />
+
+                                    <Text
+                                        text="{phone}"
+                                        class="detailValue"
+                                    />
+
+                                </VBox>
+
+
+                                <!-- Designation -->
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="Designation" />
+
+                                    <Text
+                                        text="{designation}"
+                                        class="detailValue"
+                                    />
+
+                                </VBox>
+
+
+                                <!-- Joining Date -->
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="Joining Date" />
+
+                                    <Text
+                                        text="{
+                                            path: 'joiningDate',
+                                            type: 'sap.ui.model.type.Date',
+                                            formatOptions: {
+                                                style: 'long'
+                                            }
+                                        }"
+                                        class="detailValue"
+                                    />
+
+                                </VBox>
+
+
+                                <!-- Manager -->
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="Manager" />
+
+                                    <Text
+                                        text="{managerName}"
+                                        class="detailValue"
+                                    />
+
+                                </VBox>
+
+                            </HBox>
+
+                        </VBox>
+
+                    </content>
+
+                </Panel>
+
+
+                <!-- Department Information -->
+                <Panel
+                    headerText="Department"
+                    expandable="false"
+                    class="sapUiMediumMarginTop"
+                >
+
+                    <content>
+
+                        <VBox class="sapUiSmallMargin">
+
+                            <HBox
+                                alignItems="Center"
+                            >
+
+                                <core:Icon
+                                    src="sap-icon://building"
+                                    size="2rem"
+                                    class="sapUiSmallMarginEnd"
+                                />
+
+                                <VBox>
+
+                                    <Title
+                                        text="{department/name}"
+                                        level="H4"
+                                    />
+
+                                    <Text
+                                        text="{department/departmentId}"
+                                        class="sapUiTinyMarginTop"
+                                    />
+
+                                    <Text
+                                        text="{department/description}"
+                                        class="sapUiTinyMarginTop secondaryText"
+                                    />
+
+                                </VBox>
+
+                            </HBox>
+
+                        </VBox>
+
+                    </content>
+
+                </Panel>
+
+
+                <!-- Quick Statistics -->
+                <Panel
+                    headerText="Employee Overview"
+                    expandable="false"
+                    class="sapUiMediumMarginTop"
+                >
+
+                    <content>
+
+                        <HBox
+                            wrap="Wrap"
+                            class="sapUiSmallMargin"
+                        >
+
+                            <GenericTile
+                                header="Leave Balance"
+                                subheader="Available days"
+                                class="employeeStatTile sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                                press=".onLeaveBalancesPress"
+                            >
+
+                                <TileContent>
+
+                                    <NumericContent
+                                        value="{viewModel>/availableLeaveDays}"
+                                        icon="sap-icon://calendar"
+                                    />
+
+                                </TileContent>
+
+                            </GenericTile>
+
+
+                            <GenericTile
+                                header="Pending Leaves"
+                                subheader="Awaiting approval"
+                                class="employeeStatTile sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                                press=".onLeaveRequestsPress"
+                            >
+
+                                <TileContent>
+
+                                    <NumericContent
+                                        value="{viewModel>/pendingLeaveCount}"
+                                        icon="sap-icon://pending"
+                                        valueColor="Critical"
+                                    />
+
+                                </TileContent>
+
+                            </GenericTile>
+
+
+                            <GenericTile
+                                header="Attendance"
+                                subheader="Current month"
+                                class="employeeStatTile sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                                press=".onAttendancePress"
+                            >
+
+                                <TileContent>
+
+                                    <NumericContent
+                                        value="{viewModel>/attendancePercentage}"
+                                        scale="%"
+                                        icon="sap-icon://employee"
+                                    />
+
+                                </TileContent>
+
+                            </GenericTile>
+
+
+                            <GenericTile
+                                header="Leave Requests"
+                                subheader="Total requests"
+                                class="employeeStatTile sapUiTinyMarginBottom"
+                                press=".onLeaveRequestsPress"
+                            >
+
+                                <TileContent>
+
+                                    <NumericContent
+                                        value="{viewModel>/totalLeaveRequests}"
+                                        icon="sap-icon://calendar"
+                                    />
+
+                                </TileContent>
+
+                            </GenericTile>
+
+                        </HBox>
+
+                    </content>
+
+                </Panel>
+
+
+                <!-- Leave Balances -->
+                <Panel
+                    headerText="Leave Balances"
+                    expandable="false"
+                    class="sapUiMediumMarginTop"
+                >
+
+                    <content>
+
+                        <Table
+                            id="employeeLeaveBalanceTable"
+                            items="{
+                                path: 'leaveBalances',
+                                parameters: {
+                                    $expand: 'leaveType'
+                                }
+                            }"
+                            growing="true"
+                            growingThreshold="5"
+                            noDataText="No leave balance records found"
+                        >
+
+                            <columns>
+
+                                <Column>
+                                    <Text text="Leave Type" />
+                                </Column>
+
+                                <Column
+                                    hAlign="End"
+                                >
+                                    <Text text="Total" />
+                                </Column>
+
+                                <Column
+                                    hAlign="End"
+                                >
+                                    <Text text="Used" />
+                                </Column>
+
+                                <Column
+                                    hAlign="End"
+                                >
+                                    <Text text="Pending" />
+                                </Column>
+
+                                <Column
+                                    hAlign="End"
+                                >
+                                    <Text text="Available" />
+                                </Column>
+
+                            </columns>
+
+
+                            <items>
+
+                                <ColumnListItem>
+
+                                    <cells>
+
+                                        <Text
+                                            text="{leaveType/name}"
+                                        />
+
+                                        <ObjectNumber
+                                            number="{totalDays}"
+                                            unit="days"
+                                        />
+
+                                        <ObjectNumber
+                                            number="{usedDays}"
+                                            unit="days"
+                                        />
+
+                                        <ObjectNumber
+                                            number="{pendingDays}"
+                                            unit="days"
+                                        />
+
+                                        <ObjectNumber
+                                            number="{availableDays}"
+                                            unit="days"
+                                        />
+
+                                    </cells>
+
+                                </ColumnListItem>
+
+                            </items>
+
+                        </Table>
+
+                    </content>
+
+                </Panel>
+
+
+                <!-- Recent Leave Requests -->
+                <Panel
+                    headerText="Recent Leave Requests"
+                    expandable="false"
+                    class="sapUiMediumMarginTop"
+                >
+
+                    <content>
+
+                        <Table
+                            id="employeeLeaveRequestTable"
+                            items="{
+                                path: 'leaveRequests',
+                                parameters: {
+                                    $expand: 'leaveType'
+                                }
+                            }"
+                            growing="true"
+                            growingThreshold="5"
+                            noDataText="No leave requests found"
+                        >
+
+                            <columns>
+
+                                <Column width="8rem">
+                                    <Text text="Request ID" />
+                                </Column>
+
+                                <Column>
+                                    <Text text="Leave Type" />
+                                </Column>
+
+                                <Column width="10rem">
+                                    <Text text="From" />
+                                </Column>
+
+                                <Column width="10rem">
+                                    <Text text="To" />
+                                </Column>
+
+                                <Column
+                                    width="7rem"
+                                    hAlign="End"
+                                >
+                                    <Text text="Days" />
+                                </Column>
+
+                                <Column width="9rem">
+                                    <Text text="Status" />
+                                </Column>
+
+                            </columns>
+
+
+                            <items>
+
+                                <ColumnListItem
+                                    type="Navigation"
+                                    press=".onLeaveRequestPress"
+                                >
+
+                                    <cells>
+
+                                        <ObjectIdentifier
+                                            title="{requestId}"
+                                        />
+
+                                        <Text
+                                            text="{leaveType/name}"
+                                        />
+
+                                        <Text
+                                            text="{
+                                                path: 'fromDate',
+                                                type: 'sap.ui.model.type.Date',
+                                                formatOptions: {
+                                                    style: 'medium'
+                                                }
+                                            }"
+                                        />
+
+                                        <Text
+                                            text="{
+                                                path: 'toDate',
+                                                type: 'sap.ui.model.type.Date',
+                                                formatOptions: {
+                                                    style: 'medium'
+                                                }
+                                            }"
+                                        />
+
+                                        <ObjectNumber
+                                            number="{requestedDays}"
+                                            unit="days"
+                                        />
+
+                                        <ObjectStatus
+                                            text="{status}"/>
+
+                                    </cells>
+
+                                </ColumnListItem>
+
+                            </items>
+
+                        </Table>
+
+                    </content>
+
+                </Panel>
+
+
+                <!-- Attendance Summary -->
+                <Panel
+                    headerText="Recent Attendance"
+                    expandable="false"
+                    class="sapUiMediumMarginTop"
+                >
+
+                    <content>
+
+                        <Table
+                            id="employeeAttendanceTable"
+                            items="{
+                                path: 'attendance',
+                                sorter: {
+                                    path: 'attendanceDate',
+                                    descending: true
+                                }
+                            }"
+                            growing="true"
+                            growingThreshold="5"
+                            noDataText="No attendance records found"
+                        >
+
+                            <columns>
+
+                                <Column width="10rem">
+                                    <Text text="Date" />
+                                </Column>
+
+                                <Column width="10rem">
+                                    <Text text="Check-In" />
+                                </Column>
+
+                                <Column width="10rem">
+                                    <Text text="Check-Out" />
+                                </Column>
+
+                                <Column
+                                    width="9rem"
+                                    hAlign="End"
+                                >
+                                    <Text text="Hours" />
+                                </Column>
+
+                                <Column width="9rem">
+                                    <Text text="Status" />
+                                </Column>
+
+                            </columns>
+
+
+                            <items>
+
+                                <ColumnListItem
+                                    type="Navigation"
+                                    press=".onAttendancePress"
+                                >
+
+                                    <cells>
+
+                                        <Text
+                                            text="{
+                                                path: 'attendanceDate',
+                                                type: 'sap.ui.model.type.Date',
+                                                formatOptions: {
+                                                    style: 'medium'
+                                                }
+                                            }"
+                                        />
+
+                                        <Text
+                                            text="{
+                                                path: 'checkIn',
+                                                type: 'sap.ui.model.type.DateTime',
+                                                formatOptions: {
+                                                    style: 'short'
+                                                }
+                                            }"
+                                        />
+
+                                        <Text
+                                            text="{
+                                                path: 'checkOut',
+                                                type: 'sap.ui.model.type.DateTime',
+                                                formatOptions: {
+                                                    style: 'short'
+                                                }
+                                            }"
+                                        />
+
+                                        <ObjectNumber
+                                            number="{workingHours}"
+                                            unit="hrs"
+                                        />
+
+                                        <ObjectStatus
+                                            text="{status}"/>
+
+                                    </cells>
+
+                                </ColumnListItem>
+
+                            </items>
+
+                        </Table>
+
+                    </content>
+
+                </Panel>
+
+
+                <!-- Quick Actions -->
+                <Panel
+                    headerText="Quick Actions"
+                    expandable="false"
+                    class="sapUiMediumMarginTop"
+                >
+
+                    <content>
+
+                        <HBox
+                            wrap="Wrap"
+                            class="sapUiSmallMargin"
+                        >
+
+                            <Button
+                                text="Apply Leave"
+                                icon="sap-icon://calendar"
+                                type="Emphasized"
+                                press=".onApplyLeave"
+                                class="sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                            />
+
+                            <Button
+                                text="View Leave Balance"
+                                icon="sap-icon://credit-card"
+                                press=".onLeaveBalancesPress"
+                                class="sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                            />
+
+                            <Button
+                                text="View Attendance"
+                                icon="sap-icon://employee"
+                                press=".onAttendancePress"
+                                class="sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                            />
+
+                            <Button
+                                text="Request Attendance Correction"
+                                icon="sap-icon://edit"
+                                press=".onRequestAttendanceCorrection"
+                                class="sapUiTinyMarginBottom"
+                            />
+
+                        </HBox>
+
+                    </content>
+
+                </Panel>
+
+
+                <!-- System Information -->
+                <Panel
+                    headerText="System Information"
+                    expandable="true"
+                    expanded="false"
+                    class="sapUiMediumMarginTop"
+                >
+
+                    <content>
+
+                        <VBox class="sapUiSmallMargin">
+
+                            <HBox
+                                wrap="Wrap"
+                                justifyContent="SpaceBetween"
+                            >
+
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="Created At" />
+
+                                    <Text
+                                        text="{
+                                            path: 'createdAt',
+                                            type: 'sap.ui.model.type.DateTime',
+                                            formatOptions: {
+                                                style: 'medium'
+                                            }
+                                        }"
+                                    />
+
+                                </VBox>
+
+
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="Created By" />
+
+                                    <Text
+                                        text="{createdBy}"
+                                    />
+
+                                </VBox>
+
+
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="Modified At" />
+
+                                    <Text
+                                        text="{
+                                            path: 'modifiedAt',
+                                            type: 'sap.ui.model.type.DateTime',
+                                            formatOptions: {
+                                                style: 'medium'
+                                            }
+                                        }"
+                                    />
+
+                                </VBox>
+
+
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="Modified By" />
+
+                                    <Text
+                                        text="{modifiedBy}"
+                                    />
+
+                                </VBox>
+
+                            </HBox>
+
+                        </VBox>
+
+                    </content>
+
+                </Panel>
+
+            </VBox>
+
+        </content>
+
+
+        <!-- Footer -->
+        <footer>
+
+            <OverflowToolbar>
+
+                <ToolbarSpacer />
+
+                <Button
+                    text="Apply Leave"
+                    icon="sap-icon://calendar"
+                    type="Emphasized"
+                    press=".onApplyLeave"
+                />
+
+                <Button
+                    text="Back"
+                    icon="sap-icon://nav-back"
+                    type="Transparent"
+                    press=".onBack"
+                />
+
+            </OverflowToolbar>
+
+        </footer>
+
+    </Page>
+
+</mvc:View>

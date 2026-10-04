@@ -1,0 +1,11 @@
+ID,leaveTypeId,name,description,annualLimit,isPaid,requiresProof,status,createdAt,createdBy,modifiedAt,modifiedBy
+1,LT001,Annual Leave,Leave provided for vacation personal travel and planned time off,20,true,false,ACTIVE,2026-01-01T09:00:00Z,system,2026-01-01T09:00:00Z,system
+2,LT002,Sick Leave,Leave provided when an employee is unwell or requires medical attention,12,true,true,ACTIVE,2026-01-01T09:05:00Z,system,2026-01-01T09:05:00Z,system
+3,LT003,Casual Leave,Short duration leave for personal work family commitments or unexpected situations,10,true,false,ACTIVE,2026-01-01T09:10:00Z,system,2026-01-01T09:10:00Z,system
+4,LT004,Maternity Leave,Leave provided to eligible employees for maternity and related medical care,180,true,true,ACTIVE,2026-01-01T09:15:00Z,system,2026-01-01T09:15:00Z,system
+5,LT005,Paternity Leave,Leave provided to eligible employees following the birth or adoption of a child,15,true,true,ACTIVE,2026-01-01T09:20:00Z,system,2026-01-01T09:20:00Z,system
+6,LT006,Compensatory Leave,Leave granted in exchange for approved work performed on holidays or scheduled days off,10,true,false,ACTIVE,2026-01-01T09:25:00Z,system,2026-01-01T09:25:00Z,system
+7,LT007,Bereavement Leave,Leave provided following the death of an immediate family member,5,true,true,ACTIVE,2026-01-01T09:30:00Z,system,2026-01-01T09:30:00Z,system
+8,LT008,Unpaid Leave,Leave taken when an employee has no applicable paid leave balance available,30,false,false,ACTIVE,2026-01-01T09:35:00Z,system,2026-01-01T09:35:00Z,system
+9,LT009,Study Leave,Leave provided for approved examinations certifications or professional development activities,10,true,true,ACTIVE,2026-01-01T09:40:00Z,system,2026-01-01T09:40:00Z,system
+10,LT010,Work From Home,Approved absence from the office while continuing to work remotely,30,true,false,ACTIVE,2026-01-01T09:45:00Z,system,2026-01-01T09:45:00Z,system

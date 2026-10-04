@@ -1,0 +1,397 @@
+<mvc:View
+    controllerName="com.mandeep.leaveattendance.controller.Attendance"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:fb="sap.ui.comp.filterbar"
+>
+    <Page
+        id="attendancePage"
+        title="Attendance"
+        showNavButton="true"
+        navButtonPress=".onBack"
+    >
+        <content>
+            <VBox class="sapUiMediumMargin">
+                <!-- Page Header -->
+                <HBox
+                    justifyContent="SpaceBetween"
+                    alignItems="Center"
+                >
+                    <VBox>
+                        <Title
+                            text="Attendance Management"
+                            level="H2"
+                        />
+
+                        <Text
+                            text="Monitor employee attendance, check-in and check-out records"
+                            class="sapUiTinyMarginTop"
+                        />
+                    </VBox>
+
+                    <HBox>
+                        <Button
+                            text="Check In"
+                            icon="sap-icon://log"
+                            type="Emphasized"
+                            press=".onCheckIn"
+                            class="sapUiTinyMarginEnd"
+                        />
+
+                        <Button
+                            text="Check Out"
+                            icon="sap-icon://log"
+                            type="Default"
+                            press=".onCheckOut"
+                            class="sapUiTinyMarginEnd"
+                        />
+
+                        <Button
+                            icon="sap-icon://refresh"
+                            tooltip="Refresh"
+                            type="Transparent"
+                            press=".onRefresh"
+                        />
+                    </HBox>
+                </HBox>
+
+                <!-- KPI Cards -->
+                <HBox
+                    wrap="Wrap"
+                    class="sapUiMediumMarginTop"
+                >
+                    <!-- Total Records -->
+                    <GenericTile
+                        header="Total Records"
+                        subheader="Attendance records"
+                        class="attendanceKpiTile sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{viewModel>/totalAttendance}"
+                                icon="sap-icon://employee"
+                            />
+                        </TileContent>
+                    </GenericTile>
+
+                    <!-- Present -->
+                    <GenericTile
+                        header="Present"
+                        subheader="Employees present"
+                        class="attendanceKpiTile sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{viewModel>/presentCount}"
+                                icon="sap-icon://accept"
+                                valueColor="Good"
+                            />
+                        </TileContent>
+                    </GenericTile>
+
+                    <!-- Absent -->
+                    <GenericTile
+                        header="Absent"
+                        subheader="Employees absent"
+                        class="attendanceKpiTile sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{viewModel>/absentCount}"
+                                icon="sap-icon://decline"
+                                valueColor="Error"
+                            />
+                        </TileContent>
+                    </GenericTile>
+
+                    <!-- On Leave -->
+                    <GenericTile
+                        header="On Leave"
+                        subheader="Employees on leave"
+                        class="attendanceKpiTile sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{viewModel>/onLeaveCount}"
+                                icon="sap-icon://calendar"
+                                valueColor="Critical"
+                            />
+                        </TileContent>
+                    </GenericTile>
+
+                    <!-- In Progress -->
+                    <GenericTile
+                        header="In Progress"
+                        subheader="Currently working"
+                        class="attendanceKpiTile sapUiTinyMarginBottom"
+                    >
+                        <TileContent>
+                            <NumericContent
+                                value="{viewModel>/inProgressCount}"
+                                icon="sap-icon://time-entry-request"
+                                valueColor="Neutral"
+                            />
+                        </TileContent>
+                    </GenericTile>
+                </HBox>
+
+                <!-- Filter Bar -->
+                <Panel
+                    headerText="Filter Attendance"
+                    expandable="true"
+                    expanded="true"
+                    class="sapUiMediumMarginTop"
+                >
+                    <content>
+                        <fb:FilterBar
+                            id="attendanceFilterBar"
+                            useToolbar="false"
+                            showGoOnFB="false"
+                            search=".onSearch"
+                            reset=".onResetFilters"
+                        >
+                            <fb:filterGroupItems>
+                                <!-- Employee ID -->
+                                <fb:FilterGroupItem
+                                    name="EmployeeId"
+                                    label="Employee ID"
+                                    groupName="AttendanceFilters"
+                                    visibleInFilterBar="true"
+                                >
+                                    <fb:control>
+                                        <Input
+                                            id="employeeIdFilter"
+                                            placeholder="Enter employee ID"
+                                        />
+                                    </fb:control>
+                                </fb:FilterGroupItem>
+
+                                <!-- Status -->
+                                <fb:FilterGroupItem
+                                    name="Status"
+                                    label="Status"
+                                    groupName="AttendanceFilters"
+                                    visibleInFilterBar="true"
+                                >
+                                    <fb:control>
+                                        <Select
+                                            id="statusFilter"
+                                            selectedKey=""
+                                        >
+                                            <core:Item
+                                                key=""
+                                                text="All"
+                                            />
+                                            <core:Item
+                                                key="PRESENT"
+                                                text="Present"
+                                            />
+                                            <core:Item
+                                                key="ABSENT"
+                                                text="Absent"
+                                            />
+                                            <core:Item
+                                                key="ON_LEAVE"
+                                                text="On Leave"
+                                            />
+                                            <core:Item
+                                                key="IN_PROGRESS"
+                                                text="In Progress"
+                                            />
+                                        </Select>
+                                    </fb:control>
+                                </fb:FilterGroupItem>
+
+                                <!-- Attendance Date -->
+                                <fb:FilterGroupItem
+                                    name="AttendanceDate"
+                                    label="Attendance Date"
+                                    groupName="AttendanceFilters"
+                                    visibleInFilterBar="true"
+                                >
+                                    <fb:control>
+                                        <DatePicker
+                                            id="attendanceDateFilter"
+                                            placeholder="Select date"
+                                            displayFormat="dd MMM yyyy"
+                                            valueFormat="yyyy-MM-dd"
+                                        />
+                                    </fb:control>
+                                </fb:FilterGroupItem>
+                            </fb:filterGroupItems>
+                        </fb:FilterBar>
+                    </content>
+                </Panel>
+
+                <!-- Attendance Table -->
+                <Table
+                    id="attendanceTable"
+                    class="sapUiMediumMarginTop"
+                    items="{
+                        path: '/Attendance',
+                        parameters: {
+                            $expand: 'employee'
+                        }
+                    }"
+                    growing="true"
+                    growingThreshold="15"
+                    growingScrollToLoad="true"
+                    mode="SingleSelectMaster"
+                    selectionChange=".onSelectionChange"
+                    noDataText="No attendance records found"
+                >
+                    <headerToolbar>
+                        <OverflowToolbar>
+                            <Title
+                                text="Attendance Records"
+                                level="H3"
+                            />
+
+                            <ToolbarSpacer />
+
+                            <Button
+                                text="Export"
+                                icon="sap-icon://excel-attachment"
+                                type="Transparent"
+                                press=".onExport"
+                            />
+
+                            <Button
+                                text="Refresh"
+                                icon="sap-icon://refresh"
+                                type="Transparent"
+                                press=".onRefresh"
+                            />
+                        </OverflowToolbar>
+                    </headerToolbar>
+
+                    <columns>
+                        <Column width="9rem">
+                            <Text text="Attendance ID" />
+                        </Column>
+
+                        <Column width="13rem">
+                            <Text text="Employee" />
+                        </Column>
+
+                        <Column width="9rem">
+                            <Text text="Date" />
+                        </Column>
+
+                        <Column width="10rem">
+                            <Text text="Check-In" />
+                        </Column>
+
+                        <Column width="10rem">
+                            <Text text="Check-Out" />
+                        </Column>
+
+                        <Column width="9rem">
+                            <Text text="Working Hours" />
+                        </Column>
+
+                        <Column width="9rem">
+                            <Text text="Status" />
+                        </Column>
+
+                        <Column
+                            minScreenWidth="Tablet"
+                            demandPopin="true"
+                        >
+                            <Text text="Remarks" />
+                        </Column>
+
+                        <Column
+                            width="7rem"
+                            hAlign="Center"
+                        >
+                            <Text text="Action" />
+                        </Column>
+                    </columns>
+
+                    <items>
+                        <ColumnListItem
+                            type="Navigation"
+                            press=".onAttendancePress"
+                        >
+                            <cells>
+                                <!-- Attendance ID -->
+                                <ObjectIdentifier title="{attendanceId}" />
+
+                                <!-- Employee -->
+                                <VBox>
+                                    <Text
+                                        text="{employee/firstName} {employee/lastName}"
+                                    />
+
+                                    <Text
+                                        text="{employee/employeeId}"
+                                        class="secondaryText"
+                                    />
+                                </VBox>
+
+                                <!-- Date -->
+                                <Text
+                                    text="{
+                                        path: 'attendanceDate',
+                                        type: 'sap.ui.model.type.Date',
+                                        formatOptions: {
+                                            style: 'medium'
+                                        }
+                                    }"
+                                />
+
+                                <!-- Check-In -->
+                                <Text
+                                    text="{
+                                        path: 'checkIn',
+                                        type: 'sap.ui.model.type.DateTime',
+                                        formatOptions: {
+                                            style: 'medium'
+                                        }
+                                    }"
+                                />
+
+                                <!-- Check-Out -->
+                                <Text
+                                    text="{
+                                        path: 'checkOut',
+                                        type: 'sap.ui.model.type.DateTime',
+                                        formatOptions: {
+                                            style: 'medium'
+                                        }
+                                    }"
+                                />
+
+                                <!-- Working Hours -->
+                                <ObjectNumber
+                                    number="{workingHours}"
+                                    unit="hrs"
+                                />
+
+                                <!-- Status -->
+                                <ObjectStatus
+                                    text="{status}"/>
+
+                                <!-- Remarks -->
+                                <Text
+                                    text="{remarks}"
+                                    maxLines="2"
+                                />
+
+                                <!-- Action -->
+                                <Button
+                                    icon="sap-icon://inspect"
+                                    tooltip="View Details"
+                                    type="Transparent"
+                                    press=".onAttendancePress"
+                                />
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+            </VBox>
+        </content>
+    </Page>
+</mvc:View>

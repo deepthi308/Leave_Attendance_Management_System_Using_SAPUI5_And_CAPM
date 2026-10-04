@@ -1,0 +1,570 @@
+<mvc:View
+    controllerName="com.mandeep.leaveattendance.controller.AttendanceDetail"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Page
+        id="attendanceDetailPage"
+        title="Attendance Details"
+        showNavButton="true"
+        navButtonPress=".onBack"
+    >
+
+        <content>
+
+            <VBox class="sapUiMediumMargin">
+
+                <!-- Header -->
+                <HBox
+                    justifyContent="SpaceBetween"
+                    alignItems="Center"
+                    class="attendanceDetailHeader"
+                >
+
+                    <VBox>
+
+                        <Title
+                            text="{attendanceId}"
+                            level="H2"
+                        />
+
+                        <Text
+                            text="Attendance Record"
+                            class="sapUiTinyMarginTop"
+                        />
+
+                    </VBox>
+
+                    <ObjectStatus
+                        text="{status}"/>
+
+                </HBox>
+
+
+                <!-- Employee Information -->
+                <Panel
+                    headerText="Employee Information"
+                    expandable="false"
+                    class="sapUiMediumMarginTop"
+                >
+
+                    <content>
+
+                        <VBox class="sapUiSmallMargin">
+
+                            <HBox
+                                wrap="Wrap"
+                                justifyContent="SpaceBetween"
+                            >
+
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="Employee ID" />
+
+                                    <Text
+                                        text="{employee/employeeId}"
+                                        class="detailValue"
+                                    />
+
+                                </VBox>
+
+
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="Employee Name" />
+
+                                    <Text
+                                        text="{employee/firstName} {employee/lastName}"
+                                        class="detailValue"
+                                    />
+
+                                </VBox>
+
+
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="Designation" />
+
+                                    <Text
+                                        text="{employee/designation}"
+                                        class="detailValue"
+                                    />
+
+                                </VBox>
+
+
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="Email" />
+
+                                    <Text
+                                        text="{employee/email}"
+                                        class="detailValue"
+                                    />
+
+                                </VBox>
+
+                            </HBox>
+
+                        </VBox>
+
+                    </content>
+
+                </Panel>
+
+
+                <!-- Attendance Information -->
+                <Panel
+                    headerText="Attendance Information"
+                    expandable="false"
+                    class="sapUiMediumMarginTop"
+                >
+
+                    <content>
+
+                        <VBox class="sapUiSmallMargin">
+
+                            <HBox
+                                wrap="Wrap"
+                                justifyContent="SpaceBetween"
+                            >
+
+                                <!-- Attendance Date -->
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="Attendance Date" />
+
+                                    <Text
+                                        text="{
+                                            path: 'attendanceDate',
+                                            type: 'sap.ui.model.type.Date',
+                                            formatOptions: {
+                                                style: 'long'
+                                            }
+                                        }"
+                                        class="detailValue"
+                                    />
+
+                                </VBox>
+
+
+                                <!-- Status -->
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="Status" />
+
+                                    <ObjectStatus
+                                        text="{status}"/>
+
+                                </VBox>
+
+
+                                <!-- Check In -->
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="Check-In" />
+
+                                    <Text
+                                        text="{
+                                            path: 'checkIn',
+                                            type: 'sap.ui.model.type.DateTime',
+                                            formatOptions: {
+                                                style: 'medium'
+                                            }
+                                        }"
+                                        class="detailValue"
+                                    />
+
+                                </VBox>
+
+
+                                <!-- Check Out -->
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="Check-Out" />
+
+                                    <Text
+                                        text="{
+                                            path: 'checkOut',
+                                            type: 'sap.ui.model.type.DateTime',
+                                            formatOptions: {
+                                                style: 'medium'
+                                            }
+                                        }"
+                                        class="detailValue"
+                                    />
+
+                                </VBox>
+
+
+                                <!-- Working Hours -->
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="Working Hours" />
+
+                                    <ObjectNumber
+                                        number="{workingHours}"
+                                        unit="Hours"
+                                        emphasized="true"
+                                    />
+
+                                </VBox>
+
+
+                                <!-- Remarks -->
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="Remarks" />
+
+                                    <Text
+                                        text="{remarks}"
+                                        class="detailValue"
+                                    />
+
+                                </VBox>
+
+                            </HBox>
+
+                        </VBox>
+
+                    </content>
+
+                </Panel>
+
+
+                <!-- Attendance Timeline -->
+                <Panel
+                    headerText="Attendance Timeline"
+                    expandable="false"
+                    class="sapUiMediumMarginTop"
+                >
+
+                    <content>
+
+                        <List
+                            showSeparators="Inner"
+                        >
+
+                            <CustomListItem>
+
+                                <HBox
+                                    alignItems="Center"
+                                    class="sapUiSmallMargin"
+                                >
+
+                                    <core:Icon
+                                        src="sap-icon://log"
+                                        size="1.5rem"
+                                        class="sapUiSmallMarginEnd"
+                                    />
+
+                                    <VBox>
+
+                                        <Title
+                                            text="Check-In"
+                                            level="H5"
+                                        />
+
+                                        <Text
+                                            text="{
+                                                path: 'checkIn',
+                                                type: 'sap.ui.model.type.DateTime',
+                                                formatOptions: {
+                                                    style: 'medium'
+                                                }
+                                            }"
+                                        />
+
+                                    </VBox>
+
+                                </HBox>
+
+                            </CustomListItem>
+
+
+                            <CustomListItem>
+
+                                <HBox
+                                    alignItems="Center"
+                                    class="sapUiSmallMargin"
+                                >
+
+                                    <core:Icon
+                                        src="sap-icon://history"
+                                        size="1.5rem"
+                                        class="sapUiSmallMarginEnd"
+                                    />
+
+                                    <VBox>
+
+                                        <Title
+                                            text="Check-Out"
+                                            level="H5"
+                                        />
+
+                                        <Text
+                                            text="{
+                                                path: 'checkOut',
+                                                type: 'sap.ui.model.type.DateTime',
+                                                formatOptions: {
+                                                    style: 'medium'
+                                                }
+                                            }"
+                                        />
+
+                                    </VBox>
+
+                                </HBox>
+
+                            </CustomListItem>
+
+
+                            <CustomListItem>
+
+                                <HBox
+                                    alignItems="Center"
+                                    class="sapUiSmallMargin"
+                                >
+
+                                    <core:Icon
+                                        src="sap-icon://time-entry-request"
+                                        size="1.5rem"
+                                        class="sapUiSmallMarginEnd"
+                                    />
+
+                                    <VBox>
+
+                                        <Title
+                                            text="Total Working Hours"
+                                            level="H5"
+                                        />
+
+                                        <Text
+                                            text="{workingHours} Hours"
+                                        />
+
+                                    </VBox>
+
+                                </HBox>
+
+                            </CustomListItem>
+
+                        </List>
+
+                    </content>
+
+                </Panel>
+
+
+                <!-- Attendance Correction -->
+                <Panel
+                    headerText="Attendance Correction"
+                    expandable="true"
+                    expanded="false"
+                    class="sapUiMediumMarginTop"
+                    visible="{= ${viewModel>/hasCorrection} === true }"
+                >
+
+                    <content>
+
+                        <VBox class="sapUiSmallMargin">
+
+                            <HBox
+                                justifyContent="SpaceBetween"
+                                alignItems="Center"
+                            >
+
+                                <VBox>
+
+                                    <Label text="Correction Status" />
+
+                                    <ObjectStatus
+                                        text="{viewModel>/correction/status}"/>
+
+                                </VBox>
+
+
+                                <Button
+                                    text="Request Correction"
+                                    icon="sap-icon://edit"
+                                    type="Emphasized"
+                                    press=".onRequestCorrection"
+                                    visible="{= ${viewModel>/correction/status} !== 'PENDING' }"
+                                />
+
+                            </HBox>
+
+
+                            <VBox class="sapUiMediumMarginTop">
+
+                                <Label text="Reason" />
+
+                                <Text
+                                    text="{viewModel>/correction/reason}"
+                                />
+
+                            </VBox>
+
+                        </VBox>
+
+                    </content>
+
+                </Panel>
+
+
+                <!-- System Information -->
+                <Panel
+                    headerText="System Information"
+                    expandable="true"
+                    expanded="false"
+                    class="sapUiMediumMarginTop"
+                >
+
+                    <content>
+
+                        <VBox class="sapUiSmallMargin">
+
+                            <HBox
+                                wrap="Wrap"
+                                justifyContent="SpaceBetween"
+                            >
+
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="Created At" />
+
+                                    <Text
+                                        text="{
+                                            path: 'createdAt',
+                                            type: 'sap.ui.model.type.DateTime',
+                                            formatOptions: {
+                                                style: 'medium'
+                                            }
+                                        }"
+                                    />
+
+                                </VBox>
+
+
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="Created By" />
+
+                                    <Text
+                                        text="{createdBy}"
+                                    />
+
+                                </VBox>
+
+
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="Modified At" />
+
+                                    <Text
+                                        text="{
+                                            path: 'modifiedAt',
+                                            type: 'sap.ui.model.type.DateTime',
+                                            formatOptions: {
+                                                style: 'medium'
+                                            }
+                                        }"
+                                    />
+
+                                </VBox>
+
+
+                                <VBox
+                                    width="45%"
+                                    class="sapUiSmallMarginBottom"
+                                >
+
+                                    <Label text="Modified By" />
+
+                                    <Text
+                                        text="{modifiedBy}"
+                                    />
+
+                                </VBox>
+
+                            </HBox>
+
+                        </VBox>
+
+                    </content>
+
+                </Panel>
+
+            </VBox>
+
+        </content>
+
+
+        <!-- Footer Actions -->
+        <footer>
+
+            <OverflowToolbar>
+
+                <ToolbarSpacer />
+
+                <Button
+                    text="Request Correction"
+                    icon="sap-icon://edit"
+                    type="Emphasized"
+                    press=".onRequestCorrection"
+                />
+
+                <Button
+                    text="Refresh"
+                    icon="sap-icon://refresh"
+                    type="Transparent"
+                    press=".onRefresh"
+                />
+
+            </OverflowToolbar>
+
+        </footer>
+
+    </Page>
+
+</mvc:View>

@@ -1,0 +1,539 @@
+<mvc:View
+    controllerName="com.mandeep.leaveattendance.controller.Employees"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Page
+        id="employeesPage"
+        title="Employees"
+        showNavButton="true"
+        navButtonPress=".onBack"
+    >
+
+        <content>
+
+            <VBox class="sapUiMediumMargin">
+
+                <!-- Page Header -->
+                <HBox
+                    justifyContent="SpaceBetween"
+                    alignItems="Center"
+                >
+
+                    <VBox>
+
+                        <Title
+                            text="Employee Management"
+                            level="H2"
+                        />
+
+                        <Text
+                            text="View and manage employee information"
+                            class="sapUiTinyMarginTop"
+                        />
+
+                    </VBox>
+
+                    <HBox>
+
+                        <Button
+                            text="Add Employee"
+                            icon="sap-icon://add-employee"
+                            type="Emphasized"
+                            press=".onAddEmployee"
+                            class="sapUiTinyMarginEnd"
+                        />
+
+                        <Button
+                            icon="sap-icon://refresh"
+                            tooltip="Refresh"
+                            type="Transparent"
+                            press=".onRefresh"
+                        />
+
+                    </HBox>
+
+                </HBox>
+
+
+                <!-- KPI Cards -->
+                <HBox
+                    wrap="Wrap"
+                    class="sapUiMediumMarginTop"
+                >
+
+                    <GenericTile
+                        header="Total Employees"
+                        subheader="All employees"
+                        class="employeeKpiTile sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                    >
+
+                        <TileContent>
+
+                            <NumericContent
+                                value="{viewModel>/totalEmployees}"
+                                icon="sap-icon://group"
+                            />
+
+                        </TileContent>
+
+                    </GenericTile>
+
+
+                    <GenericTile
+                        header="Active"
+                        subheader="Active employees"
+                        class="employeeKpiTile sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                    >
+
+                        <TileContent>
+
+                            <NumericContent
+                                value="{viewModel>/activeEmployees}"
+                                icon="sap-icon://employee"
+                                valueColor="Good"
+                            />
+
+                        </TileContent>
+
+                    </GenericTile>
+
+
+                    <GenericTile
+                        header="Inactive"
+                        subheader="Inactive employees"
+                        class="employeeKpiTile sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                    >
+
+                        <TileContent>
+
+                            <NumericContent
+                                value="{viewModel>/inactiveEmployees}"
+                                icon="sap-icon://employee-pane"
+                                valueColor="Critical"
+                            />
+
+                        </TileContent>
+
+                    </GenericTile>
+
+
+                    <GenericTile
+                        header="Departments"
+                        subheader="Employee departments"
+                        class="employeeKpiTile sapUiTinyMarginBottom"
+                    >
+
+                        <TileContent>
+
+                            <NumericContent
+                                value="{viewModel>/departmentCount}"
+                                icon="sap-icon://building"
+                            />
+
+                        </TileContent>
+
+                    </GenericTile>
+
+                </HBox>
+
+
+                <!-- Search and Filters -->
+                <Panel
+                    headerText="Search & Filter"
+                    expandable="true"
+                    expanded="true"
+                    class="sapUiMediumMarginTop"
+                >
+
+                    <content>
+
+                        <VBox class="sapUiSmallMargin">
+
+                            <HBox
+                                wrap="Wrap"
+                                alignItems="End"
+                            >
+
+                                <!-- Search -->
+                                <VBox
+                                    width="25%"
+                                    class="sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                                >
+
+                                    <Label
+                                        text="Search"
+                                        labelFor="employeeSearchInput"
+                                    />
+
+                                    <SearchField
+                                        id="employeeSearchInput"
+                                        placeholder="Search employee..."
+                                        search=".onSearch"
+                                        liveChange=".onLiveSearch"
+                                    />
+
+                                </VBox>
+
+
+                                <!-- Employee ID -->
+                                <VBox
+                                    width="18%"
+                                    class="sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                                >
+
+                                    <Label
+                                        text="Employee ID"
+                                        labelFor="employeeIdFilter"
+                                    />
+
+                                    <Input
+                                        placeholder="EMP001"
+                                    />
+
+                                </VBox>
+
+
+                                <!-- Department -->
+                                <VBox
+                                    width="20%"
+                                    class="sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                                >
+
+                                    <Label
+                                        text="Department"
+                                        labelFor="departmentFilter"
+                                    />
+
+                                    <Select
+                                        id="departmentFilter"
+                                        selectedKey=""
+                                    >
+
+                                        <core:Item
+                                            key=""
+                                            text="All Departments"
+                                        />
+
+                                        <core:Item
+                                            key="1"
+                                            text="Human Resources"
+                                        />
+
+                                        <core:Item
+                                            key="2"
+                                            text="Information Technology"
+                                        />
+
+                                        <core:Item
+                                            key="3"
+                                            text="Finance"
+                                        />
+
+                                        <core:Item
+                                            key="4"
+                                            text="Sales"
+                                        />
+
+                                        <core:Item
+                                            key="5"
+                                            text="Marketing"
+                                        />
+
+                                        <core:Item
+                                            key="6"
+                                            text="Operations"
+                                        />
+
+                                        <core:Item
+                                            key="7"
+                                            text="Customer Support"
+                                        />
+
+                                        <core:Item
+                                            key="8"
+                                            text="Research and Development"
+                                        />
+
+                                        <core:Item
+                                            key="9"
+                                            text="Legal and Compliance"
+                                        />
+
+                                        <core:Item
+                                            key="10"
+                                            text="Administration"
+                                        />
+
+                                    </Select>
+
+                                </VBox>
+
+
+                                <!-- Status -->
+                                <VBox
+                                    width="15%"
+                                    class="sapUiTinyMarginEnd sapUiTinyMarginBottom"
+                                >
+
+                                    <Label
+                                        text="Status"
+                                        labelFor="employeeStatusFilter"
+                                    />
+
+                                    <Select
+                                        id="employeeStatusFilter"
+                                        selectedKey=""
+                                    >
+
+                                        <core:Item
+                                            key=""
+                                            text="All"
+                                        />
+
+                                        <core:Item
+                                            key="ACTIVE"
+                                            text="Active"
+                                        />
+
+                                        <core:Item
+                                            key="INACTIVE"
+                                            text="Inactive"
+                                        />
+
+                                    </Select>
+
+                                </VBox>
+
+
+                                <!-- Buttons -->
+                                <HBox class="sapUiTinyMarginBottom">
+
+                                    <Button
+                                        text="Apply"
+                                        icon="sap-icon://filter"
+                                        type="Emphasized"
+                                        press=".onApplyFilters"
+                                        class="sapUiTinyMarginEnd"
+                                    />
+
+                                    <Button
+                                        text="Clear"
+                                        icon="sap-icon://clear-filter"
+                                        type="Transparent"
+                                        press=".onClearFilters"
+                                    />
+
+                                </HBox>
+
+                            </HBox>
+
+                        </VBox>
+
+                    </content>
+
+                </Panel>
+
+
+                <!-- Employee Table -->
+                <Table
+                    id="employeesTable"
+                    class="sapUiMediumMarginTop"
+                    items="{
+                        path: '/Employees',
+                        parameters: {
+                            $expand: 'department'
+                        },
+                        sorter: {
+                            path: 'employeeId',
+                            descending: false
+                        }
+                    }"
+                    growing="true"
+                    growingThreshold="10"
+                    growingScrollToLoad="true"
+                    mode="None"
+                    noDataText="No employees found"
+                >
+
+                    <headerToolbar>
+
+                        <OverflowToolbar>
+
+                            <Title
+                                text="Employees"
+                                level="H3"
+                            />
+
+                            <ToolbarSpacer />
+
+                            <Button
+                                text="Export"
+                                icon="sap-icon://excel-attachment"
+                                type="Transparent"
+                                press=".onExport"
+                                class="sapUiTinyMarginEnd"
+                            />
+
+                            <Button
+                                icon="sap-icon://refresh"
+                                tooltip="Refresh"
+                                type="Transparent"
+                                press=".onRefresh"
+                            />
+
+                        </OverflowToolbar>
+
+                    </headerToolbar>
+
+
+                    <columns>
+
+                        <Column width="9rem">
+                            <Text text="Employee ID" />
+                        </Column>
+
+                        <Column width="16rem">
+                            <Text text="Employee" />
+                        </Column>
+
+                        <Column width="18rem">
+                            <Text text="Email" />
+                        </Column>
+
+                        <Column width="15rem">
+                            <Text text="Designation" />
+                        </Column>
+
+                        <Column width="18rem">
+                            <Text text="Department" />
+                        </Column>
+
+                        <Column width="11rem">
+                            <Text text="Joining Date" />
+                        </Column>
+
+                        <Column width="9rem">
+                            <Text text="Status" />
+                        </Column>
+
+                        <Column
+                            width="7rem"
+                            hAlign="Center"
+                        >
+                            <Text text="Action" />
+                        </Column>
+
+                    </columns>
+
+
+                    <items>
+
+                        <ColumnListItem
+                            type="Navigation"
+                            press=".onEmployeePress"
+                        >
+
+                            <cells>
+
+                                <!-- Employee ID -->
+                                <ObjectIdentifier
+                                    title="{employeeId}"
+                                />
+
+
+                                <!-- Employee -->
+                                <HBox
+                                    alignItems="Center"
+                                >
+
+                                    <Avatar
+                                        displaySize="S"
+                                        displayShape="Circle"
+                                        class="sapUiTinyMarginEnd"
+                                    />
+
+                                    <VBox>
+
+                                        <Text
+                                            text="{firstName} {lastName}"
+                                        />
+
+                                        <Text
+                                            text="{phone}"
+                                            class="secondaryText"
+                                        />
+
+                                    </VBox>
+
+                                </HBox>
+
+
+                                <!-- Email -->
+                                <Text
+                                    text="{email}"
+                                />
+
+
+                                <!-- Designation -->
+                                <Text
+                                    text="{designation}"
+                                />
+
+
+                                <!-- Department -->
+                                <VBox>
+
+                                    <Text
+                                        text="{department/name}"
+                                    />
+
+                                    <Text
+                                        text="{department/departmentId}"
+                                        class="secondaryText"
+                                    />
+
+                                </VBox>
+
+
+                                <!-- Joining Date -->
+                                <Text
+                                    text="{
+                                        path: 'joiningDate',
+                                        type: 'sap.ui.model.type.Date',
+                                        formatOptions: {
+                                            style: 'medium'
+                                        }
+                                    }"
+                                />
+
+
+                                <!-- Status -->
+                                <ObjectStatus
+                                    text="{status}"/>
+
+
+                                <!-- Action -->
+                                <Button
+                                    icon="sap-icon://inspect"
+                                    tooltip="View Employee"
+                                    type="Transparent"
+                                    press=".onEmployeePress"
+                                />
+
+                            </cells>
+
+                        </ColumnListItem>
+
+                    </items>
+
+                </Table>
+
+            </VBox>
+
+        </content>
+
+    </Page>
+
+</mvc:View>

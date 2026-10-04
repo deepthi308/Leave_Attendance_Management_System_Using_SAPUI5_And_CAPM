@@ -1,0 +1,233 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Dialog
+        id="leaveRequestDialog"
+        title="Apply Leave"
+        contentWidth="40rem"
+        draggable="true"
+        resizable="true"
+    >
+        <content>
+            <VBox
+                width="100%"
+                class="sapUiMediumMargin"
+            >
+                <HBox
+                    width="100%"
+                    justifyContent="SpaceBetween"
+                >
+                    <VBox width="48%">
+                        <Label
+                            text="Employee ID"
+                            required="true"
+                            labelFor="leaveRequestEmployeeIdInput"
+                        />
+
+                        <Input
+                            id="leaveRequestEmployeeIdInput"
+                            width="100%"
+                            placeholder="Enter Employee ID"
+                            maxLength="20"
+                        />
+                    </VBox>
+
+                    <VBox width="48%">
+                        <Label
+                            text="Leave Type"
+                            required="true"
+                            labelFor="leaveRequestLeaveTypeSelect"
+                        />
+
+                        <Select
+                            id="leaveRequestLeaveTypeSelect"
+                            width="100%"
+                            selectedKey=""
+                        >
+                            <items>
+                                <core:Item
+                                    key=""
+                                    text="Select Leave Type"
+                                />
+                                <core:Item
+                                    key="LT001"
+                                    text="Annual Leave"
+                                />
+                                <core:Item
+                                    key="LT002"
+                                    text="Sick Leave"
+                                />
+                                <core:Item
+                                    key="LT003"
+                                    text="Casual Leave"
+                                />
+                                <core:Item
+                                    key="LT004"
+                                    text="Maternity Leave"
+                                />
+                                <core:Item
+                                    key="LT005"
+                                    text="Paternity Leave"
+                                />
+                                <core:Item
+                                    key="LT006"
+                                    text="Compensatory Leave"
+                                />
+                                <core:Item
+                                    key="LT007"
+                                    text="Bereavement Leave"
+                                />
+                                <core:Item
+                                    key="LT008"
+                                    text="Unpaid Leave"
+                                />
+                                <core:Item
+                                    key="LT009"
+                                    text="Study Leave"
+                                />
+                                <core:Item
+                                    key="LT010"
+                                    text="Work From Home"
+                                />
+                            </items>
+                        </Select>
+                    </VBox>
+                </HBox>
+
+                <HBox
+                    width="100%"
+                    justifyContent="SpaceBetween"
+                    class="sapUiSmallMarginTop"
+                >
+                    <VBox width="48%">
+                        <Label
+                            text="From Date"
+                            required="true"
+                            labelFor="leaveRequestFromDatePicker"
+                        />
+
+                        <DatePicker
+                            id="leaveRequestFromDatePicker"
+                            width="100%"
+                            valueFormat="yyyy-MM-dd"
+                            displayFormat="dd MMM yyyy"
+                            placeholder="Select start date"
+                        />
+                    </VBox>
+
+                    <VBox width="48%">
+                        <Label
+                            text="To Date"
+                            required="true"
+                            labelFor="leaveRequestToDatePicker"
+                        />
+
+                        <DatePicker
+                            id="leaveRequestToDatePicker"
+                            width="100%"
+                            valueFormat="yyyy-MM-dd"
+                            displayFormat="dd MMM yyyy"
+                            placeholder="Select end date"
+                        />
+                    </VBox>
+                </HBox>
+
+                <HBox
+                    width="100%"
+                    justifyContent="SpaceBetween"
+                    class="sapUiSmallMarginTop"
+                >
+                    <VBox width="48%">
+                        <Label
+                            text="Requested Days"
+                            labelFor="leaveRequestDaysInput"
+                        />
+
+                        <Input
+                            id="leaveRequestDaysInput"
+                            width="100%"
+                            type="Number"
+                            placeholder="Calculated automatically"
+                            editable="false"
+                        />
+                    </VBox>
+
+                    <VBox width="48%">
+                        <Label
+                            text="Status"
+                            labelFor="leaveRequestStatusSelect"
+                        />
+
+                        <Select
+                            width="100%"
+                            selectedKey="DRAFT"
+                            enabled="false"
+                        >
+                            <items>
+                                <core:Item
+                                    key="DRAFT"
+                                    text="Draft"
+                                />
+                                <core:Item
+                                    key="PENDING"
+                                    text="Pending"
+                                />
+                            </items>
+                        </Select>
+                    </VBox>
+                </HBox>
+
+                <Label
+                    text="Reason"
+                    required="true"
+                    labelFor="leaveRequestReasonInput"
+                    class="sapUiSmallMarginTop"
+                />
+
+                <TextArea
+                    id="leaveRequestReasonInput"
+                    width="100%"
+                    rows="5"
+                    maxLength="1000"
+                    placeholder="Enter the reason for your leave"
+                />
+
+                <MessageStrip
+                    id="leaveRequestInfoMessage"
+                    text="Please ensure that you have sufficient leave balance before submitting the request."
+                    type="Information"
+                    showIcon="true"
+                    class="sapUiSmallMarginTop"
+                />
+            </VBox>
+        </content>
+
+        <beginButton>
+            <Button
+                id="leaveRequestDialogSaveButton"
+                text="Save"
+                type="Emphasized"
+                icon="sap-icon://save"
+                press=".onSaveLeaveRequest"
+            />
+        </beginButton>
+
+        <endButton>
+            <Button
+                id="leaveRequestDialogSubmitButton"
+                text="Submit"
+                icon="sap-icon://paper-plane"
+                press=".onSubmitLeaveRequest"
+            />
+        </endButton>
+
+        <buttons>
+            <Button
+                id="leaveRequestDialogCancelButton"
+                text="Cancel"
+                press=".onCancelLeaveRequest"
+            />
+        </buttons>
+    </Dialog>
+</core:FragmentDefinition>

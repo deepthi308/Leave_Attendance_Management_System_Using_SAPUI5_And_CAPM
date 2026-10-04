@@ -1,0 +1,11 @@
+ID,employeeId,firstName,lastName,email,phone,designation,joiningDate,managerName,status,department_ID,createdAt,createdBy,modifiedAt,modifiedBy
+1,EMP001,Arun,Kumar,arun.kumar@example.com,9876543210,SAP UI5 Developer,2023-06-12,Ravi Shankar,ACTIVE,2,2026-09-01T09:00:00Z,system,2026-09-01T09:00:00Z,system
+2,EMP002,Priya,Sharma,priya.sharma@example.com,9876543211,HR Business Partner,2022-04-18,Meena Krishnan,ACTIVE,1,2026-09-01T09:05:00Z,system,2026-09-01T09:05:00Z,system
+3,EMP003,Rahul,Menon,rahul.menon@example.com,9876543212,Senior Accountant,2021-08-23,Suresh Iyer,ACTIVE,3,2026-09-01T09:10:00Z,system,2026-09-01T09:10:00Z,system
+4,EMP004,Divya,Rajan,divya.rajan@example.com,9876543213,Sales Executive,2024-01-15,Anand Kumar,ACTIVE,4,2026-09-01T09:15:00Z,system,2026-09-01T09:15:00Z,system
+5,EMP005,Karthik,Ramesh,karthik.ramesh@example.com,9876543214,Marketing Specialist,2023-09-04,Sneha Patel,ACTIVE,5,2026-09-01T09:20:00Z,system,2026-09-01T09:20:00Z,system
+6,EMP006,Meera,Nair,meera.nair@example.com,9876543215,Operations Analyst,2022-11-07,Vikram Rao,ACTIVE,6,2026-09-01T09:25:00Z,system,2026-09-01T09:25:00Z,system
+7,EMP007,Vijay,Krishnan,vijay.krishnan@example.com,9876543216,Customer Support Lead,2020-05-25,Anita Menon,ACTIVE,7,2026-09-01T09:30:00Z,system,2026-09-01T09:30:00Z,system
+8,EMP008,Ananya,Iyer,ananya.iyer@example.com,9876543217,Software Engineer,2024-07-08,Ravi Shankar,ACTIVE,8,2026-09-01T09:35:00Z,system,2026-09-01T09:35:00Z,system
+9,EMP009,Rohit,Verma,rohit.verma@example.com,9876543218,Compliance Analyst,2023-02-20,Neha Kapoor,ACTIVE,9,2026-09-01T09:40:00Z,system,2026-09-01T09:40:00Z,system
+10,EMP010,Sneha,Reddy,sneha.reddy@example.com,9876543219,Administration Executive,2021-12-13,Manoj Rao,ACTIVE,10,2026-09-01T09:45:00Z,system,2026-09-01T09:45:00Z,system

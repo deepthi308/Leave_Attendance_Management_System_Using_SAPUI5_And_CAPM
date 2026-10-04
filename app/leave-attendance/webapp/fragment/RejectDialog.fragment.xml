@@ -1,0 +1,59 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Dialog
+        id="rejectDialog"
+        title="Reject Request"
+        contentWidth="32rem"
+        draggable="true"
+        resizable="true"
+    >
+        <content>
+            <VBox
+                width="100%"
+                class="sapUiMediumMargin"
+            >
+                <MessageStrip
+                    id="rejectDialogWarning"
+                    text="Please provide a reason for rejecting this request."
+                    type="Warning"
+                    showIcon="true"
+                    class="sapUiSmallMarginBottom"
+                />
+
+                <Label
+                    text="Manager Comments"
+                    required="true"
+                    labelFor="rejectReasonInput"
+                />
+
+                <TextArea
+                    id="rejectReasonInput"
+                    width="100%"
+                    rows="6"
+                    maxLength="1000"
+                    placeholder="Enter the reason for rejection..."
+                />
+            </VBox>
+        </content>
+
+        <beginButton>
+            <Button
+                id="rejectDialogConfirmButton"
+                text="Reject"
+                type="Reject"
+                icon="sap-icon://decline"
+                press=".onConfirmReject"
+            />
+        </beginButton>
+
+        <endButton>
+            <Button
+                id="rejectDialogCancelButton"
+                text="Cancel"
+                press=".onCancelReject"
+            />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>
